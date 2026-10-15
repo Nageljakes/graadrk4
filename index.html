@@ -27,6 +27,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
 .brand .logo{font-size:40px;line-height:1}
+.brand img.logo{width:56px;height:56px;object-fit:cover;border:3px solid var(--ink);border-radius:18px;background:#fff;box-shadow:0 3px 0 var(--ink)}
 .brand h1{font-size:clamp(1.2rem,3.4vw,1.7rem)}
 .brand p{font-size:.85rem;color:var(--soft)}
 .chips{display:flex;gap:10px;align-items:center}
@@ -165,7 +166,7 @@ svg.it{width:42px;height:42px}
 
 <div class="wrap">
   <header class="top">
-    <div class="brand"><div class="logo" aria-hidden="true">🐸</div><div><h1>Chloé se Graad R Avontuur</h1><p>Kwartaal 4 oefening</p></div></div>
+    <div class="brand"><img class="logo" src="boodjieklas-logo.png" alt="Bootjieklas 2026"><div><h1>Chloé se Graad R Avontuur</h1><p>Bootjieklas 2026 • Kwartaal 4</p></div></div>
     <div class="chips">
       <button class="chip" id="snd" aria-pressed="true" title="Stemlees aan of af">🔊 <span id="sndt">Stem aan</span></button>
       <div class="chip" id="voicechip" title="Watter stem lees voor">🎙️ <span id="voicetag">…</span></div>
@@ -177,7 +178,7 @@ svg.it{width:42px;height:42px}
     <section id="home">
       <div class="hero card pad">
         <h2>Kom ons speel en leer!</h2>
-        <p>Kies 'n prentjie. Die speletjie sê die vraag hardop as jou toestel 'n Afrikaanse stem het. Elke regte antwoord met die eerste probeer gee 'n ster.</p>
+        <p>Kies 'n prentjie. Die speletjie lees elke vraag hardop in Afrikaans voor. Elke regte antwoord met die eerste probeer gee 'n ster.</p>
         <div class="row">
           <button class="btn" id="mix">🏆 Gemengde uitdaging</button>
           <span class="small" id="progress"></span>
@@ -296,10 +297,10 @@ function uniq(fn,n){const seen=new Set(),out=[];let g=0;while(out.length<n&&g++<
 const W={a:[['appel','🍎'],['arend','🦅']],b:[['bal','⚽'],['boom','🌳'],['brood','🍞'],['bril','👓']],d:[['dolfyn','🐬'],['deur','🚪']],
 e:[['eend','🦆'],['eier','🥚'],['eekhoring','🐿️']],f:[['fiets','🚲'],['foto','📷'],['friet','🍟']],g:[['gitaar','🎸'],['gorilla','🦍']],
 h:[['hond','🐶'],['huis','🏠'],['hoed','🎩']],i:[['inkvis','🦑']],j:[['jas','🧥'],['juweel','💎']],
-k:[['kat','🐱'],['kers','🍒'],['kasteel','🏰'],['kaas','🧀'],['koei','🐄']],l:[['leeu','🦁'],['lemoen','🍊'],['lamp','💡'],['lepel','🥄']],
+k:[['kat','🐱'],['kers','🍒'],['kasteel','🏰'],['kaas','🧀'],['koei','🐄'],['kas','🗄️']],l:[['leeu','🦁'],['lemoen','🍊'],['lamp','💡'],['lepel','🥄']],
 m:[['maan','🌙'],['muis','🐭'],['melk','🥛'],['mielie','🌽']],n:[['neus','👃'],['neushoring','🦏']],o:[['olifant','🐘'],['oog','👁️'],['ooi','🐑']],
 p:[['padda','🐸'],['pizza','🍕'],['piesang','🍌'],['potlood','✏️']],r:[['reën','🌧️'],['rok','👗'],['roos','🌹'],['ring','💍']],
-s:[['son','☀️'],['skoen','👟'],['slang','🐍'],['ster','⭐'],['sleutel','🔑']],t:[['trein','🚂'],['tamatie','🍅'],['tent','⛺'],['tier','🐅'],['tand','🦷']],
+s:[['son','☀️'],['skoen','👟'],['slang','🐍'],['ster','⭐'],['sleutel','🔑'],['stoel','🪑']],t:[['trein','🚂'],['tamatie','🍅'],['tent','⛺'],['tier','🐅'],['tand','🦷']],
 u:[['uil','🦉'],['ui','🧅']],v:[['vis','🐟'],['vlinder','🦋'],['vark','🐷'],['vuur','🔥'],['voël','🐦']],w:[['wolk','☁️'],['wortel','🥕'],['walvis','🐳']],
 y:[['ys','🧊']],z:[['zebra','🦓']]};
 const L=Object.keys(W);
@@ -328,7 +329,7 @@ function qBook(){const t=pick([
   return mk('Lees',t[0],'<div class="visual">📖</div>',big(t[1]).replace('big','big" style="font-size:1.2rem'),t[2].map(x=>big(x).replace('big','big" style="font-size:1.2rem')),t[3])}
 const genKlanke=()=>shuffle([].concat(uniq(qSndPic,4),uniq(qSndLetter,3),uniq(qBlend,3)));
 const genRym=()=>shuffle([].concat(uniq(qRhyme,5),uniq(qSyll,5)));
-const HFW=['ek','is','my','jy','en','die','dit','nie','van','ons','dis','kyk'];
+const HFW=['ek','is','my','jy','en','die','dit','nie','van','ons','dis','kyk','mat','kas','deur','tafel','stoel'];
 function qHFW(){const w=pick(HFW);const o=sample(HFW.filter(x=>x!==w),2);return mk('Hoogfrekwensiewoorde',`Lees die woord. Tik dieselfde woord: “${w}”.`,`<div class="word">${w}</div>`,big(w),o.map(big),`Die woord is “${w}”. Jy sien dit oral in die klas.`)}
 const genLees=()=>shuffle([].concat(uniq(qReadWord,5),uniq(qHFW,3),[qBook(),qBook()].filter((q,i,a)=>a.findIndex(z=>z.q===q.q)===i)));
 
@@ -603,7 +604,8 @@ function runStorie(tile){
   const starters=[
     {e:'🐰 🌳 🦊 🌈',q:['Wie is die karakters en hoe lyk hulle?','Waar speel die storie af?','Wat gebeur eerste, daarna en laaste?']},
     {e:'🐘 🐸 🌧️ 🏠',q:['Wat is die karakters se name?','Wat gebeur toe dit begin reën?','Hoe eindig die storie?']},
-    {e:'👧 🐶 🎈 🌻',q:['Beskryf die meisie en die hond.','Waarheen gaan hulle?','Wat gebeur heel aan die einde?']}];
+    {e:'👧 🐶 🎈 🌻',q:['Beskryf die meisie en die hond.','Waarheen gaan hulle?','Wat gebeur heel aan die einde?']},
+    {e:'👦 👧 🐶 🐱',q:['Wie is die vier karakters? Beskryf elkeen.','Waar speel die storie af?','Wat gebeur eerste, daarna en laaste?']}];
   const s=pick(starters);let n=0;
   stageCard(`<div style="text-align:center"><span class="qtag">Vertel ’n storie</span></div><h2 class="qtext">Vertel ’n storie met ’n begin, middel en einde.</h2>
     <div class="visual" style="font-size:56px">${s.e}</div>
@@ -611,7 +613,7 @@ function runStorie(tile){
     <p class="small" style="text-align:center">Grootmens: tik <b>+</b> vir elke volsin wat jou kind vertel. Mik vir 6 tot 10 sinne.</p>
     <div class="counter"><button class="btn ghost" id="mn" aria-label="Een minder">−</button><div class="num" id="num" aria-live="polite">0</div><button class="btn" id="pl" aria-label="Een meer">+</button></div>
     <div class="pips" id="pips">${Array.from({length:10},()=>'<span class="pip"></span>').join('')}</div>
-    <div class="checks"><label><input type="checkbox"> Duidelike begin</label><label><input type="checkbox"> Karakters benoem en beskryf</label><label><input type="checkbox"> Plek en besonderhede genoem</label><label><input type="checkbox"> Duidelike einde</label></div>
+    <div class="checks"><label><input type="checkbox"> Duidelike begin</label><label><input type="checkbox"> Karakters benoem en beskryf (4 of meer)</label><label><input type="checkbox"> Plek en besonderhede genoem</label><label><input type="checkbox"> Duidelike einde</label></div>
     <div class="actions"><button class="btn green" id="fin" disabled>Ons is klaar ✔</button></div>`);
   const upd=()=>{$('#num').textContent=n;$$('#pips .pip').forEach((p,j)=>p.classList.toggle('on',j<n));$('#fin').disabled=n<6};
   $('#pl').addEventListener('click',()=>{if(n<10){n++;upd()}});$('#mn').addEventListener('click',()=>{if(n>0){n--;upd()}});
@@ -620,7 +622,7 @@ function runStorie(tile){
 
 /* know myself (adult-led, nothing typed or stored) */
 function runMyself(tile){
-  const items=['Ek kan my naam sê','Ek kan my van sê','Ek ken my verjaarsdag (dag en maand)','Ek ken my ouer se foonnommer','Ek ken my huisadres','Ek weet of ek ’n seun of meisie is'];
+  const items=['Ek kan my naam sê','Ek kan my van sê','Ek ken my verjaarsdag (dag en maand)','Ek ken my ouer se foonnommer','Ek ken my huisadres','Ek weet of ek ’n seun of meisie is','Ek weet watter taal ons by die huis praat (Afrikaans)'];
   stageCard(`<div style="text-align:center"><span class="qtag">Ek ken myself</span></div><h2 class="qtext">Oefen saam met ’n betroubare grootmens.</h2>
     <div class="visual">🧒 🏠 📞 🎂</div>
     <p class="small" style="text-align:center">Sê dit hardop. Niks word hier getik of gestoor nie. Grootmens: kruis af wat jou kind al ken.</p>
@@ -628,6 +630,17 @@ function runMyself(tile){
     <p class="small" style="text-align:center">Praat ook oor wie jou kan help as jy verdwaal, en met wie jy jou besonderhede mag deel.</p>
     <div class="actions"><button class="btn green" id="fin">Ons het geoefen ✔</button></div>`);
   $('#fin').addEventListener('click',()=>{addStar(1);complete(tile,'Mooi gedoen! Oefen elke dag ’n bietjie.')});
+}
+
+/* speak clearly: R-sound, little speech, weekend news (adult-led) */
+function runPraat(tile){
+  const items=['Ek sê die “r” duidelik: rrr-rok, rrr-roos, rrr-ring, rrr-reën','Ek praat in volle sinne en praat duidelik','Ek lewer ’n praatjie oor ’n tema: ek kyk na my gehoor','Ek vertel my naweeknuus: wie, wat, waar en wanneer','Ek luister sonder om te onderbreek'];
+  stageCard(`<div style="text-align:center"><span class="qtag">Praat mooi</span></div><h2 class="qtext">Praat saam met ’n grootmens.</h2>
+    <div class="visual">💬 🗣️ 👂</div>
+    <p class="small" style="text-align:center">Oefenwoorde met r: rok, roos, ring, reën, rak, brood, bril, trein. Rol die r: rrrrok! Kies dan ’n tema (my troeteldier, my naweek) en praat daaroor.</p>
+    <div class="checks">${items.map((t,k)=>`<label><input type="checkbox" id="p${k}"> ${t}</label>`).join('')}</div>
+    <div class="actions"><button class="btn green" id="fin">Ons het gepraat ✔</button></div>`);
+  $('#fin').addEventListener('click',()=>{addStar(1);complete(tile,'Mooi gepraat! Jy praat al hoe duideliker.')});
 }
 
 /* performing arts (no lyrics stored) */
@@ -669,6 +682,17 @@ function drawGuide(cv,item){
     else if(item.k==='circ'){for(let k=0;k<5;k++){ctx.setLineDash([2,12]);ctx.beginPath();ctx.arc(110+k*125,150,52,0,Math.PI*2);ctx.stroke();ctx.setLineDash([])}ctx.fillStyle='#2f9e5f';ctx.beginPath();ctx.arc(110,98,9,0,7);ctx.fill();return}
     path(pts);return;
   }
+  if(item.t==='vorm'){
+    const cx=360,cy=160;ctx.setLineDash([2,12]);ctx.strokeStyle='#8fa0c2';ctx.lineWidth=5;ctx.beginPath();
+    let sx=cx,sy=cy;
+    if(item.k==='sirkel'){ctx.arc(cx,cy,100,0,Math.PI*2);sx=cx;sy=cy-100}
+    else if(item.k==='vierkant'){ctx.rect(260,60,200,200);sx=260;sy=60}
+    else if(item.k==='driehoek'){ctx.moveTo(cx,40);ctx.lineTo(500,260);ctx.lineTo(220,260);ctx.closePath();sx=cx;sy=40}
+    else if(item.k==='reghoek'){ctx.rect(180,90,360,140);sx=180;sy=90}
+    else if(item.k==='ovaal'){ctx.ellipse(cx,cy,150,90,0,0,Math.PI*2);sx=cx;sy=cy-90}
+    else if(item.k==='ruit'){ctx.moveTo(cx,40);ctx.lineTo(510,160);ctx.lineTo(cx,280);ctx.lineTo(210,160);ctx.closePath();sx=cx;sy=40}
+    ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#2f9e5f';ctx.beginPath();ctx.arc(sx,sy,9,0,7);ctx.fill();return;
+  }
   const txt=item.v;ctx.font='800 190px Nunito, Arial, sans-serif';ctx.textBaseline='alphabetic';ctx.textAlign='center';
   ctx.fillStyle='#eef3ff';ctx.lineWidth=5;
   const draw=(s,x)=>{ctx.fillText(s,x,base);ctx.setLineDash([2,10]);ctx.strokeText(s,x,base);ctx.setLineDash([])};
@@ -679,6 +703,7 @@ function runSkryf(tile){
   const sets={Patrone:[['Golwe','wave'],['Sigsag','zig'],['Lusse','loop'],['Sirkels','circ'],['Skuins','slant']].map(x=>({l:x[0],t:'pat',k:x[1]})),
     Syfers:['1','2','3','4','5','6','7','8','9','10'].map(x=>({l:x,v:x})),
     Letters:'a b d e f g h i j k l m n o p r s t u v w y z'.split(' ').map(x=>({l:x,v:x})),
+    Vorms:['sirkel','vierkant','driehoek','reghoek','ovaal','ruit'].map(x=>({l:x,t:'vorm',k:x})),
     Woorde:['kat','vis','son','bal','rok','pot','boom','huis','eier','melk'].map(x=>({l:x,v:x})),
     'Naam en van':[]};
   let cat='Patrone',cur=sets.Patrone[0],name='Chloé',colorV='#3b82d6',marks=0;
@@ -709,7 +734,7 @@ function runSkryf(tile){
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(paint).catch(()=>{});
 }
 function runTeken(tile){
-  const prompts=['Teken ’n mens met ’n gesig, arms, bene en klere. Gebruik die hele bladsy.','Teken jouself in die tuin. Wat is voor en wat is agter jou?','Teken jou gesin by die huis met ’n lug en ’n grond.','Teken jou gunsteling dier in sy huis met baie besonderhede.'];
+  const prompts=['Teken ’n mens met ’n gesig, arms, bene en klere. Gebruik die hele bladsy.','Teken jouself in die tuin. Wat is voor en wat is agter jou?','Teken jou gesin by die huis met ’n lug en ’n grond.','Teken jou gunsteling dier in sy huis met baie besonderhede.','Teken drie dinge wat met die klank “'+pick(L)+'” begin.'];
   let colorV='#e8543a',size=8;
   stageCard(`<div style="text-align:center"><span class="qtag">Skeppende kuns</span></div><h2 class="qtext" id="pr">${pick(prompts)}</h2>
     <div class="paper" style="aspect-ratio:720/480"><canvas id="cv" width="720" height="480" aria-label="Tekenarea"></canvas></div>
@@ -740,9 +765,12 @@ function runBou(tile){
 const MOVES=[
  ['🦶','Balanseer op jou tone','Staan op jou tone en kyk reguit voor. Tel stadig tot 10.',10],
  ['👣','Balanseer op jou hakke','Staan op jou hakke met jou tone in die lug. Tel stadig tot 10.',10],
- ['🧍','Staan op een been','Staan op een been. Probeer dit met oë oop, dan met oë toe, dan met arms gekruis. Moet nie forseer nie.',10],
- ['↩️','Loop agteruit','Loop agteruit op ’n reguit lyn. Maak eers seker die pad is vry.',0],
- ['🦘','Spring oor voorwerpe','Spring oor ’n sagte, lae voorwerp, soos ’n opgerolde handdoek.',0],
+ ['🧍','Staan op een been – oë oop','Staan 19 sekondes op een been met oë oop. Gebruik jou arms om te balanseer.',19],
+ ['🦩','Staan op een been – oë toe','Staan 5 sekondes op een been met oë toe. Gebruik jou arms om te balanseer.',5],
+ ['🦩','Staan op een been – arms gekruis','Staan 5 sekondes op een been met oë oop en arms gekruis oor jou bors.',5],
+ ['🐾','Spring op een been','Spring op een been met jou hande op jou heupe.',0],
+ ['↩️','Loop agteruit','Loop agteruit op ’n reguit lyn, op jou tone of hakke. Maak eers seker die pad is vry.',0],
+ ['🦘','Spring oor voorwerpe','Spring oor ’n sagte, lae voorwerp en hou jou voetjies teen mekaar.',0],
  ['⭐','Ster-spronge','Doen 10 ster-spronge. Maak jou arms en bene wyd oop.',0],
  ['🐴','Galop','Galop soos ’n perd deur die tuin of kamer.',0],
  ['🐇','Huppel en draai','Huppel vorentoe. Verander van rigting as die grootmens ’n teken gee.',0],
@@ -750,8 +778,12 @@ const MOVES=[
  ['🤸','Bollemakiesies','Maak 2 bollemakiesies agter mekaar, net op ’n sagte mat en met ’n grootmens langsaan.',0],
  ['💪','Opstote','Doen 10 opstote sonder om te stop. Pas dit aan by wat jy kan doen.',0],
  ['🧺','Vang en gooi','Gooi en vang ’n boontjiesakkie en ’n bal. Begin met kort afstande.',0],
- ['🏀','Bons en vang','Bons die bal en vang dit weer. Hoeveel keer sonder om dit te mis?',0],
- ['🏑','Kolf of dribbel','Dribbel ’n bal met jou voete of kolf ’n sagte bal met ’n kolf.',0]];
+ ['🎈','Gooi in die lug en vang','Gooi ’n bal in die lug in en vang dit weer met albei hande.',0],
+ ['🏀','Bons met een hand','Bons ’n groot bal met een hand. Tel hoeveel keer jy kan.',0],
+ ['🎾','Bons en vang tennisbal','Bons ’n tennisbal en vang dit weer.',0],
+ ['🏏','Slaan met krieketkolf','Slaan ’n sagte bal met ’n krieketkolf. Mik na ’n teiken.',0],
+ ['🎯','Gooi na ’n teiken','Gooi ’n bal of boontjiesakkie na ’n teiken.',0],
+ ['⚽','Dribbel met jou voete','Dribbel ’n bal met jou voete.',0]];
 function runBeweeg(tile){
   const deck=shuffle(MOVES);let i=0,did=new Set(),tm=null;
   onLeave(()=>{if(tm)clearInterval(tm)});
@@ -782,6 +814,7 @@ const TILES=[
  {id:'luister',g:'Afrikaans',n:'Luister en doen',s:'2 tot 5 opdragte onthou',ic:'👂',st:'🐰',run:runLuister},
  {id:'volgorde',g:'Afrikaans',n:'Storievolgorde',s:'Sit prentjies in volgorde',ic:'🖼️',st:'🐢',run:runVolgorde},
  {id:'storie',g:'Afrikaans',n:'Vertel ’n storie',s:'6 tot 10 sinne, saam met ’n grootmens',ic:'🗣️',st:'🦁',run:runStorie},
+ {id:'praat',g:'Afrikaans',n:'Praat mooi',s:'R-klank, praatjie en naweeknuus',ic:'💬',st:'🐯',run:runPraat},
  {id:'tel',g:'Wiskunde',n:'Tel en getalle',s:'Tel tot 20, in 2’s en 10’s tot 100',ic:'🔢',st:'🐘',run:t=>runQuiz(t),gen:genTel},
  {id:'somme',g:'Wiskunde',n:'Plus en min',s:'Somme tot 10',ic:'➕',st:'🐼',run:t=>runQuiz(t),gen:genSomme},
  {id:'meer',g:'Wiskunde',n:'Meer, minder, eerste',s:'Vergelyk en ordinale getalle',ic:'⚖️',st:'🐧',run:t=>runQuiz(t),gen:genMeer},
@@ -796,7 +829,7 @@ const TILES=[
  {id:'weer',g:'Lewensvaardigheid',n:'Weer en gevoelens',s:'Wat sien en voel jy?',ic:'🌦️',st:'🦆',run:t=>runQuiz(t),gen:genWeer},
  {id:'verskille',g:'Lewensvaardigheid',n:'Vind die verskille',s:'8 verskille en ooreenkomste',ic:'🔍',st:'🦊',run:runVerskille},
  {id:'myself',g:'Lewensvaardigheid',n:'Ek ken myself',s:'Naam, verjaarsdag en meer',ic:'🧒',st:'🐿️',run:runMyself},
- {id:'skryf',g:'Kuns en skryf',n:'Natrek en skryf',s:'Patrone, syfers, woorde, naam en van',ic:'✏️',st:'🐨',run:runSkryf},
+ {id:'skryf',g:'Kuns en skryf',n:'Natrek en skryf',s:'Patrone, vorms, woorde, naam en van',ic:'✏️',st:'🐨',run:runSkryf},
  {id:'teken',g:'Kuns en skryf',n:'Teken',s:'’n Prent met voor en agter',ic:'🎨',st:'🦄',run:runTeken},
  {id:'optree',g:'Kuns en skryf',n:'Rympies en liedjies',s:'Voer iets op vir die gesin',ic:'🎤',st:'🐓',run:runOptree},
  {id:'beweeg',g:'Liggaamlike opvoeding',n:'Beweeg en speel',s:'Balans, spring, gooi en vang',ic:'🤸',st:'🐆',run:runBeweeg}
