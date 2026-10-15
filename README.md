@@ -43,7 +43,7 @@ Installeer: maak die afgelaaide lêer oop en tik **Installeer** (laat
 | Klanke ken (a, b, d, e, f, g, h, i, j, k, l, m, n, o, p, r, s, t, u, v, w, y, z) | Klanke |
 | Woorde benoem; prentjies teken wat met klanke begin | Klanke, Teken |
 | Klankies bymekaar voeg (analise en sintese) | Klanke |
-| Rym (kat/rak, vis/mis, rok/pot) | Rym en lettergrepe |
+| Rym (kat/rak, vis/mis, rok/stok) | Rym en lettergrepe |
 | Klanke herken en benoem; 4–6 karakters bespreek | Klanke, Storie |
 | Prentjies in volgorde plaas + storie vertel | Storievolgorde |
 | Boek korrek vashou, van voor na agter blaai | Lees woordjies |
