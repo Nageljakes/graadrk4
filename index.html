@@ -274,7 +274,7 @@ function qSndLetter(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter
 const BL=[['vis','🐟','v – i – s'],['bal','⚽','b – a – l'],['kat','🐱','k – a – t'],['son','☀️','s – o – n'],['rok','👗','r – o – k'],['bed','🛏️','b – e – d'],['pot','🍲','p – o – t'],['lig','💡','l – i – g']];
 function qBlend(){const w=pick(BL);const o=sample(BL.filter(x=>x!==w),2);
   return mk('Klanke saamvoeg',`Trek die klanke saam: ${w[2]}. Watter prentjie is dit?`,`<div class="seq">${w[2]}</div>`,pic(w[1],''),o.map(x=>pic(x[1],'')),`${w[2]} sê ons saam as “${w[0]}”.`,`Trek die klanke saam. ${w[2].replace(/ – /g,', ')}. Watter prentjie is dit?`)}
-const RH=[['vis','🐟','mis','🌫️'],['muis','🐭','huis','🏠'],['hond','🐶','mond','👄'],['tand','🦷','hand','🖐️','strand','🏖️'],['hoed','🎩','bloed','🩸'],['deur','🚪','kleur','🎨'],['pak','📦','sak','👜']]
+const RH=[['vis','🐟','mis','🌫️'],['muis','🐭','huis','🏠'],['hond','🐶','mond','👄'],['tand','🦷','hand','🖐️','strand','🏖️'],['hoed','🎩','bloed','🩸'],['deur','🚪','kleur','🎨'],['pak','📦','sak','👜'],['kat','🐱','rak','🗄️'],['rok','👗','pot','🍲']]
   .map(g=>{const r=[];for(let i=0;i<g.length;i+=2)r.push([g[i],g[i+1]]);return r});
 function qRhyme(){const gi=rnd(0,RH.length-1),g=RH[gi];const t=pick(g);const good=pick(g.filter(x=>x!==t));
   const bad=sample(RH.filter((_,i)=>i!==gi),2).map(x=>pick(x));
@@ -292,11 +292,13 @@ function qBook(){const t=pick([
   return mk('Lees',t[0],'<div class="visual">📖</div>',big(t[1]).replace('big','big" style="font-size:1.2rem'),t[2].map(x=>big(x).replace('big','big" style="font-size:1.2rem')),t[3])}
 const genKlanke=()=>shuffle([].concat(uniq(qSndPic,4),uniq(qSndLetter,3),uniq(qBlend,3)));
 const genRym=()=>shuffle([].concat(uniq(qRhyme,5),uniq(qSyll,5)));
-const genLees=()=>shuffle([].concat(uniq(qReadWord,6),[qBook(),qBook()].filter((q,i,a)=>a.findIndex(z=>z.q===q.q)===i)));
+const HFW=['ek','is','my','jy','en','die','dit','nie','van','ons','dis','kyk'];
+function qHFW(){const w=pick(HFW);const o=sample(HFW.filter(x=>x!==w),2);return mk('Hoogfrekwensiewoorde',`Lees die woord. Tik dieselfde woord: “${w}”.`,`<div class="word">${w}</div>`,big(w),o.map(big),`Die woord is “${w}”. Jy sien dit oral in die klas.`)}
+const genLees=()=>shuffle([].concat(uniq(qReadWord,5),uniq(qHFW,3),[qBook(),qBook()].filter((q,i,a)=>a.findIndex(z=>z.q===q.q)===i)));
 
 /* ---------- Wiskunde ---------- */
 const NAME=['nul','een','twee','drie','vier','vyf','ses','sewe','agt','nege','tien'];
-const ORD=['eerste','tweede','derde','vierde','vyfde'];
+const ORD=['eerste','tweede','derde','vierde','vyfde','sesde','sewende'];
 const OBJ=['🍎','⭐','🐟','🎈','🦋','🍓','🐥','🚗','🌸','🍪'];
 function near(c,lo,hi){const s=new Set([c]);let g=0;while(s.size<3&&g++<80){const n=c+pick([-3,-2,-1,1,2,3]);if(n>=lo&&n<=hi)s.add(n)}return Array.from(s).filter(x=>x!==c)}
 const numQ=(tag,q,vis,c,lo,hi,why,sp)=>mk(tag,q,vis,big(c),near(c,lo,hi).map(big),why,sp);
@@ -309,9 +311,10 @@ const qNameDig=()=>{const n=rnd(1,10);return numQ('Getalsimbole','Watter syfer i
 const qAfterBefore=()=>{const after=Math.random()<.5;const n=after?rnd(0,9):rnd(2,10);const c=after?n+1:n-1;
   return numQ('Aan- en terugtel',after?`Watter getal kom ná ${n}?`:`Watter getal kom net voor ${n}?`,`<div class="letter">${n}</div>`,c,0,10,after?`Ná ${n} kom ${c}.`:`Net voor ${n} kom ${c}.`)};
 const qBack=()=>{const s=rnd(5,10),c=s-2;return numQ('Terugtel',`Tel terug: ${s}, ${s-1}, wat kom volgende?`,`<div class="seq">${s} · ${s-1} · ?</div>`,c,0,10,`${s}, ${s-1}, ${c}. Terug is elke keer een minder.`)};
-function qSkip(step){const k=rnd(3,4);const seq=Array.from({length:k},(_,i)=>step*(i+1));const c=step*(k+1);
+function qSkip(step){const k=step===10?rnd(5,9):rnd(3,4);const seq=Array.from({length:k},(_,i)=>step*(i+1));const c=step*(k+1);
   const bad=step===2?[c+1,c+2]:[c+5,c+10];
-  return mk(`Tel in ${step}'s`,`Tel in ${step}'s. Wat kom volgende?`,`<div class="seq">${seq.join(' · ')} · ?</div>`,big(c),bad.map(big),`${seq.join(', ')}, ${c}. Elke keer kom ${step} by.`)}
+  const shown=seq.length>4?['…'].concat(seq.slice(-3)):seq;
+  return mk(`Tel in ${step}'s`,`Tel in ${step}'s. Wat kom volgende?`,`<div class="seq">${shown.join(' · ')} · ?</div>`,big(c),bad.map(big),`${seq.join(', ')}, ${c}. Elke keer kom ${step} by.`)}
 const genTel=()=>shuffle([].concat(uniq(qCount,3),[qCount20()],uniq(qDigName,2),[qNameDig(),qAfterBefore(),qBack(),qSkip(2),qSkip(10)]));
 const qAdd=()=>{const a=rnd(1,6),b=rnd(1,Math.min(5,10-a)),e=pick(OBJ),c=a+b;return numQ('Optel',`Hoeveel is ${a} plus ${b}?`,`<div class="eq">${objs(a,e)}<b>+</b>${objs(b,e)}</div>`,c,1,10,`${a} plus ${b} is ${c}. Tel aan vanaf ${a}.`)};
 const qSub=()=>{const a=rnd(3,10),b=rnd(1,a-1),e=pick(OBJ),c=a-b;return numQ('Aftrek',`Hoeveel is ${a} min ${b}?`,objs(a,e,b,5),c,0,10,`${a} min ${b} is ${c}. Die verbleikte prentjies gaan weg.`)};
@@ -325,7 +328,7 @@ function qCompare(){const e=pick(OBJ),eq=Math.random()<.25;let a=rnd(1,9),b=eq?a
   return {tag:'Meer, minder, ewe veel',q,spoken:q.replace('MEER','meer').replace('MINDER','minder'),visual:`<div class="vs"><div class="grp">${objs(a,e)}</div><div class="grp">${objs(b,e)}</div></div>`,
     why:eq?'Albei groepe is ewe veel.':`${Math.max(a,b)} is meer as ${Math.min(a,b)}.`,opts:o.map((h,i)=>({h,ok:i===ans}))}}
 const ANIM=['🐶','🐱','🐰','🐸','🐷','🐮','🦁','🐵','🐼','🐔'];
-function qOrdinal(){const row=sample(ANIM,5);const i=rnd(0,4);const bad=sample(row.filter((_,k)=>k!==i),2);
+function qOrdinal(){const row=sample(ANIM,7);const i=rnd(0,6);const bad=sample(row.filter((_,k)=>k!==i),2);
   return mk('Ordinale getalle',`Wie is die ${ORD[i]} in die ry?`,`<div class="row"><span class="hint">begin ➜</span>${row.map(e=>`<span>${e}</span>`).join('')}</div>`,pic(row[i],''),bad.map(e=>pic(e,'')),`Tel van links af: ${row.slice(0,i+1).join(' ')}. Die ${ORD[i]} is ${row[i]}.`)}
 const genMeer=()=>shuffle([].concat(uniq(qCompare,4),uniq(qOrdinal,4)));
 const PAT=['🔴','🔵','🟡','🟢','🟣','🟠','⭐','❤️','🌙','🍎','🔷','🌸'];
@@ -352,6 +355,8 @@ const qBlocks=()=>{const n=rnd(2,9);return numQ('Meet met blokkies','Hoeveel blo
 function rulerSvg(n){const x0=14,u=28;let t='';for(let i=0;i<=10;i++){t+=`<line x1="${x0+i*u}" y1="58" x2="${x0+i*u}" y2="76" stroke="${INK}" stroke-width="2.5"/><text x="${x0+i*u}" y="98" text-anchor="middle" font-size="15" font-weight="800" fill="${INK}" font-family="Nunito,sans-serif">${i}</text>`}
   return `<svg viewBox="0 0 ${x0*2+10*u} 108" class="barsvg" role="img" aria-label="Liniaal met 'n kryt"><rect x="${x0}" y="14" width="${n*u}" height="28" rx="6" fill="#e8543a" stroke="${INK}" stroke-width="3"/><rect x="${x0-8}" y="52" width="${10*u+16}" height="52" rx="8" fill="#ffe9a8" stroke="${INK}" stroke-width="3"/>${t}</svg>`}
 const qRuler=()=>{const n=rnd(2,9);return numQ('Liniaal','Hoe lank is die kryt? Lees die getal op die liniaal.',rulerSvg(n),n,1,10,`Die kryt eindig by ${n} op die liniaal.`)};
+const qHands=()=>{const t=pick([[`Die tafel is 6 hande lank. Waarmee het ons gemeet?`,'Hande',['Voete','Blokkies'],'Ons het met oop hande gemeet.'],[`Die mat is 4 voete lank. Waarmee het ons gemeet?`,'Voete',['Hande','Blokkies'],'Ons het met voete gemeet. Sit een voet voor die ander.'],[`Die toring is 7 blokkies hoog. Waarmee het ons gemeet?`,'Blokkies',['Hande','Voete'],'Ons het met blokkies gemeet. Tel die blokkies.']]);return mk('Meet met hande en voete',t[0],'<div class="visual">🖐️ 👣 🧱</div>',big(t[1]),t[2].map(big),t[3])};
+const qTape=()=>{const n=rnd(2,9);return numQ('Maatband','Hoe lank is die lint? Lees die getal op die maatband.',rulerSvg(n),n,1,10,`Die lint eindig by ${n} op die maatband.`)};
 const COINS={'5c':[22,'#c98a4b'],'10c':[25,'#c98a4b'],'20c':[28,'#c98a4b'],'50c':[31,'#c98a4b'],'R1':[30,'#cfd6df'],'R2':[34,'#cfd6df'],'R5':[38,'#cfd6df']};
 const NOTES={'R10':'#4caf6a','R20':'#b98a5e','R50':'#e0604f','R100':'#5b8fd9','R200':'#f2a03d'};
 const VAL={'5c':5,'10c':10,'20c':20,'50c':50,R1:100,R2:200,R5:500,R10:1000,R20:2000,R50:5000,R100:10000,R200:20000};
@@ -365,7 +370,7 @@ const qFindNote=()=>{const k=pick(nk);return mk('Note',`Watter noot is ${k}?`,''
 const qMoreMoney=()=>{const p=sample(ak,2);if(VAL[p[0]]===VAL[p[1]])return qMoreMoney();const hi=VAL[p[0]]>VAL[p[1]]?0:1;
   return mk('Meer werd','Watter een is meer werd?','',money(p[hi]),[money(p[1-hi])],`${p[hi]} is meer werd as ${p[1-hi]}.`)};
 const qCoinNote=()=>{const k=pick(ak);const isCoin=!!COINS[k];return mk('Muntstuk of noot','Is dit ’n muntstuk of ’n noot?',money(k),big(isCoin?'Muntstuk':'Noot').replace('big','big" style="font-size:1.4rem'),[big(isCoin?'Noot':'Muntstuk').replace('big','big" style="font-size:1.4rem')],isCoin?'Muntstukke is rond en van metaal.':'Note is van papier of plastiek en reghoekig.')};
-const genMeting=()=>shuffle([].concat(uniq(qLongest,3),[qEqualLen()],uniq(qBlocks,2),uniq(qRuler,2)));
+const genMeting=()=>shuffle([].concat(uniq(qLongest,2),[qEqualLen()],uniq(qBlocks,2),uniq(qRuler,2),uniq(qHands,2),[qTape()]));
 const genGeld=()=>shuffle([].concat(uniq(qCoinName,2),uniq(qFindCoin,2),uniq(qFindNote,2),uniq(qMoreMoney,2),uniq(qCoinNote,2)));
 
 /* shapes and space */
@@ -635,24 +640,26 @@ function drawGuide(cv,item){
 function runSkryf(tile){
   const sets={Patrone:[['Golwe','wave'],['Sigsag','zig'],['Lusse','loop'],['Sirkels','circ'],['Skuins','slant']].map(x=>({l:x[0],t:'pat',k:x[1]})),
     Syfers:['1','2','3','4','5','6','7','8','9','10'].map(x=>({l:x,v:x})),
-    Letters:'a b d e f g h i j k l m n o p r s t u v w y z'.split(' ').map(x=>({l:x,v:x})),Naam:[]};
+    Letters:'a b d e f g h i j k l m n o p r s t u v w y z'.split(' ').map(x=>({l:x,v:x})),
+    Woorde:['kat','vis','son','bal','rok','pot','boom','huis','eier','melk'].map(x=>({l:x,v:x})),
+    'Naam en van':[]};
   let cat='Patrone',cur=sets.Patrone[0],name='Chloé',colorV='#3b82d6',marks=0;
   stageCard(`<div style="text-align:center"><span class="qtag">Natrek en skryf</span></div><h2 class="qtext">Trek die kolletjies na. Begin by die groen kolletjie.</h2>
     <p class="small" style="text-align:center">Werk van links na regs en van bo na onder. Hou die potlood met jou duim, wysvinger en middelvinger. Oefen ook op papier met ’n potlood.</p>
     <div class="chipsrow" id="cats"></div><div class="chipsrow" id="items"></div>
-    <div class="field" id="nmf" hidden><label for="nm">My naam:</label><input id="nm" maxlength="14" autocomplete="off" value="${name}"><span class="small">Die naam bly net op hierdie skerm.</span></div>
+    <div class="field" id="nmf" hidden><label for="nm">My naam en van:</label><input id="nm" maxlength="24" autocomplete="off" placeholder="Naam en van" value="${name}"><span class="small">Die naam bly net op hierdie skerm.</span></div>
     <div class="paper" style="aspect-ratio:720/320"><canvas id="g" width="720" height="320"></canvas><canvas id="ink" width="720" height="320" aria-label="Skryfarea"></canvas></div>
     <div class="swatches" id="sw"></div>
     <div class="actions"><button class="btn ghost" id="clr">Vee my skryfwerk uit</button><button class="btn green" id="fin">Ek het geoefen ✔</button></div>`);
   const g=$('#g'),ink=$('#ink');
   const ctx=attachInk(ink,()=>colorV,()=>10);
   ink.addEventListener('pointerup',()=>{marks++});
-  function paint(){ctx.clearRect(0,0,ink.width,ink.height);if(cat==='Naam')drawGuide(g,{v:name||'?'});else drawGuide(g,cur)}
+  function paint(){ctx.clearRect(0,0,ink.width,ink.height);if(cat==='Naam en van')drawGuide(g,{v:name||'?'});else drawGuide(g,cur)}
   function chips(){
     $('#cats').innerHTML=Object.keys(sets).map(k=>`<button aria-pressed="${k===cat}" data-c="${k}">${k}</button>`).join('');
-    $('#items').innerHTML=cat==='Naam'?'':sets[cat].map((x,j)=>`<button aria-pressed="${x===cur}" data-j="${j}">${x.l}</button>`).join('');
-    $('#nmf').hidden=cat!=='Naam';
-    $$('#cats button').forEach(b=>b.addEventListener('click',()=>{cat=b.dataset.c;if(cat!=='Naam')cur=sets[cat][0];chips();paint()}));
+    $('#items').innerHTML=cat==='Naam en van'?'':sets[cat].map((x,j)=>`<button aria-pressed="${x===cur}" data-j="${j}">${x.l}</button>`).join('');
+    $('#nmf').hidden=cat!=='Naam en van';
+    $$('#cats button').forEach(b=>b.addEventListener('click',()=>{cat=b.dataset.c;if(cat!=='Naam en van')cur=sets[cat][0];chips();paint()}));
     $$('#items button').forEach(b=>b.addEventListener('click',()=>{cur=sets[cat][+b.dataset.j];chips();paint()}));
   }
   $('#nm').addEventListener('input',e=>{name=e.target.value.replace(/[<>&"]/g,'');paint()});
@@ -678,6 +685,17 @@ function runTeken(tile){
   $$('#sz button').forEach(b=>b.addEventListener('click',()=>{size=+b.dataset.s;$$('#sz button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));
   $('#clr').addEventListener('click',wipe);$('#np').addEventListener('click',()=>{$('#pr').textContent=pick(prompts)});
   $('#fin').addEventListener('click',()=>{addStar(2);complete(tile,'Wat ’n mooi kunswerk!')});
+}
+
+/* build and puzzle (adult-led, offline) */
+function runBou(tile){
+  const items=['Ek bou ’n 3D-konstruksie met blokke (toring, huis of brug)','Ek bou ’n 2D-prentjie met blokke na (maak ’n voorbeeld presies na)','Ek vou ’n vorm of prent in twee ewe helftes (simmetrie)','Ek voltooi ’n legkaart van 45 stukke of meer'];
+  stageCard(`<div style="text-align:center"><span class="qtag">Bou en legkaart</span></div><h2 class="qtext">Bou saam met ’n grootmens.</h2>
+    <div class="visual">🧱 🧩 🏰</div>
+    <p class="small" style="text-align:center">Gebruik regte blokke en ’n regte legkaart. Grootmens: kruis af wat julle gedoen het.</p>
+    <div class="checks">${items.map((t,k)=>`<label><input type="checkbox" id="b${k}"> ${t}</label>`).join('')}</div>
+    <div class="actions"><button class="btn green" id="fin">Ons het gebou ✔</button></div>`);
+  $('#fin').addEventListener('click',()=>{addStar(1);complete(tile,'Mooi gebou! Probeer volgende keer iets nog groter.')});
 }
 
 /* physical education cards (adult supervises) */
@@ -722,24 +740,25 @@ function runBeweeg(tile){
 const TILES=[
  {id:'klanke',g:'Afrikaans',n:'Klanke',s:'Beginklanke en klanke saamvoeg',ic:'🔤',st:'🐸',run:t=>runQuiz(t),gen:genKlanke},
  {id:'rym',g:'Afrikaans',n:'Rym en lettergrepe',s:'Rymwoorde en klap-klap',ic:'🎵',st:'🦜',run:t=>runQuiz(t),gen:genRym},
- {id:'lees',g:'Afrikaans',n:'Lees woordjies',s:'Woord en prentjie',ic:'📖',st:'🦉',run:t=>runQuiz(t),gen:genLees},
+ {id:'lees',g:'Afrikaans',n:'Lees woordjies',s:'Woorde, prentjies en boek',ic:'📖',st:'🦉',run:t=>runQuiz(t),gen:genLees},
  {id:'luister',g:'Afrikaans',n:'Luister en doen',s:'2 tot 5 opdragte onthou',ic:'👂',st:'🐰',run:runLuister},
  {id:'volgorde',g:'Afrikaans',n:'Storievolgorde',s:'Sit prentjies in volgorde',ic:'🖼️',st:'🐢',run:runVolgorde},
  {id:'storie',g:'Afrikaans',n:'Vertel ’n storie',s:'6 tot 10 sinne, saam met ’n grootmens',ic:'🗣️',st:'🦁',run:runStorie},
- {id:'tel',g:'Wiskunde',n:'Tel en getalle',s:'Tot 20, getalname, in 2’s en 10’s',ic:'🔢',st:'🐘',run:t=>runQuiz(t),gen:genTel},
+ {id:'tel',g:'Wiskunde',n:'Tel en getalle',s:'Tel tot 20, in 2’s en 10’s tot 100',ic:'🔢',st:'🐘',run:t=>runQuiz(t),gen:genTel},
  {id:'somme',g:'Wiskunde',n:'Plus en min',s:'Somme tot 10',ic:'➕',st:'🐼',run:t=>runQuiz(t),gen:genSomme},
  {id:'meer',g:'Wiskunde',n:'Meer, minder, eerste',s:'Vergelyk en ordinale getalle',ic:'⚖️',st:'🐧',run:t=>runQuiz(t),gen:genMeer},
  {id:'patrone',g:'Wiskunde',n:'Patrone',s:'Gaan voort met die patroon',ic:'🔴',st:'🦋',run:t=>runQuiz(t),gen:genPatrone},
- {id:'meting',g:'Wiskunde',n:'Meet en vergelyk',s:'Lank, kort, blokkies, liniaal',ic:'📏',st:'🦒',run:t=>runQuiz(t),gen:genMeting},
+ {id:'meting',g:'Wiskunde',n:'Meet en vergelyk',s:'Lank, kort, hande, liniaal, maatband',ic:'📏',st:'🦒',run:t=>runQuiz(t),gen:genMeting},
  {id:'geld',g:'Wiskunde',n:'Geld',s:'Muntstukke en note, 5c tot R200',ic:'🪙',st:'🦔',run:t=>runQuiz(t),gen:genGeld},
  {id:'vorm',g:'Wiskunde',n:'Vorms',s:'2D- en 3D-vorms',ic:'🔷',st:'🐙',run:t=>runQuiz(t),gen:genVorm},
  {id:'ruimte',g:'Wiskunde',n:'Links, regs, simmetrie',s:'Ruimte en vorm',ic:'↔️',st:'🦓',run:t=>runQuiz(t),gen:genRuimte},
+ {id:'bou',g:'Wiskunde',n:'Bou en legkaart',s:'Blokke, simmetrie en legkaart',ic:'🧱',st:'🦖',run:runBou},
  {id:'data',g:'Wiskunde',n:'Sorteer en piktogram',s:'Sorteer en lees ’n piktogram',ic:'📊',st:'🐝',run:t=>runQuiz(t),gen:genData},
  {id:'tyd',g:'Lewensvaardigheid',n:'Dae, maande, seisoene',s:'Vandag, gister en môre',ic:'📅',st:'🐞',run:t=>runQuiz(t),gen:genTyd},
  {id:'weer',g:'Lewensvaardigheid',n:'Weer en gevoelens',s:'Wat sien en voel jy?',ic:'🌦️',st:'🦆',run:t=>runQuiz(t),gen:genWeer},
  {id:'verskille',g:'Lewensvaardigheid',n:'Vind die verskille',s:'8 verskille en ooreenkomste',ic:'🔍',st:'🦊',run:runVerskille},
  {id:'myself',g:'Lewensvaardigheid',n:'Ek ken myself',s:'Naam, verjaarsdag en meer',ic:'🧒',st:'🐿️',run:runMyself},
- {id:'skryf',g:'Kuns en skryf',n:'Natrek en skryf',s:'Patrone, syfers, letters en jou naam',ic:'✏️',st:'🐨',run:runSkryf},
+ {id:'skryf',g:'Kuns en skryf',n:'Natrek en skryf',s:'Patrone, syfers, woorde, naam en van',ic:'✏️',st:'🐨',run:runSkryf},
  {id:'teken',g:'Kuns en skryf',n:'Teken',s:'’n Prent met voor en agter',ic:'🎨',st:'🦄',run:runTeken},
  {id:'optree',g:'Kuns en skryf',n:'Rympies en liedjies',s:'Voer iets op vir die gesin',ic:'🎤',st:'🐓',run:runOptree},
  {id:'beweeg',g:'Liggaamlike opvoeding',n:'Beweeg en speel',s:'Balans, spring, gooi en vang',ic:'🤸',st:'🐆',run:runBeweeg}
