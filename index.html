@@ -305,7 +305,7 @@ u:[['uil','🦉'],['ui','🧅']],v:[['vis','🐟'],['vlinder','🦋'],['vark','�
 y:[['ys','🧊']],z:[['zebra','🦓']]};
 const L=Object.keys(W);
 function qSndPic(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter(x=>x!==l),2).map(x=>pick(W[x]));
-  return mk('Beginklank',`Watter prentjie begin met die klank “${l}”?`,`<div class="letter">${l}</div>`,pic(w[1],w[0]),o.map(x=>pic(x[1],x[0])),`“${w[0]}” begin met ${l}. Sê die woord stadig.`,`Watter prentjie begin met die klank ${l}?`)}
+  return mk('Beginklank',`Watter prentjie begin met die letter “${l}”?`,`<div class="letter">${l}</div>`,pic(w[1],w[0]),o.map(x=>pic(x[1],x[0])),`“${w[0]}” begin met ${l}. Sê die woord stadig.`,`Watter prentjie begin met die letter ${l}?`)}
 function qSndLetter(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter(x=>x!==l),2);
   return mk('Beginklank','Met watter klank begin hierdie woord?',`<div class="bigpic">${w[1]}<span>${w[0]}</span></div>`,big(l),o.map(big),`“${w[0]}” begin met ${l}.`,`Met watter klank begin die woord ${w[0]}?`)}
 const BL=[['vis','🐟','v – i – s'],['bal','⚽','b – a – l'],['kat','🐱','k – a – t'],['son','☀️','s – o – n'],['rok','👗','r – o – k'],['bed','🛏️','b – e – d'],['pot','🍲','p – o – t'],['lig','💡','l – i – g']];
@@ -354,7 +354,7 @@ function qSkip(step){const k=step===10?rnd(5,9):rnd(3,4);const seq=Array.from({l
   return mk(`Tel in ${step}'s`,`Tel in ${step}'s. Wat kom volgende?`,`<div class="seq">${shown.join(' · ')} · ?</div>`,big(c),bad.map(big),`${seq.join(', ')}, ${c}. Elke keer kom ${step} by.`)}
 const genTel=()=>shuffle([].concat(uniq(qCount,3),[qCount20()],uniq(qDigName,2),[qNameDig(),qAfterBefore(),qBack(),qSkip(2),qSkip(10)]));
 const qAdd=()=>{const a=rnd(1,6),b=rnd(1,Math.min(5,10-a)),e=pick(OBJ),c=a+b;return numQ('Optel',`Hoeveel is ${a} plus ${b}?`,`<div class="eq">${objs(a,e)}<b>+</b>${objs(b,e)}</div>`,c,1,10,`${a} plus ${b} is ${c}. Tel aan vanaf ${a}.`)};
-const qSub=()=>{const a=rnd(3,10),b=rnd(1,a-1),e=pick(OBJ),c=a-b;return numQ('Aftrek',`Hoeveel is ${a} min ${b}?`,objs(a,e,b,5),c,0,10,`${a} min ${b} is ${c}. Die verbleikte prentjies gaan weg.`)};
+const qSub=()=>{const a=rnd(3,10),b=rnd(1,a-1),e=pick(OBJ),c=a-b;return numQ('Aftrek',`Hoeveel is ${a} min ${b}?`,objs(a,e,b,5),c,0,10,`${a} min ${b} is ${c}. Die verbleikte prentjies gaan weg.`,`Hoeveel is ${a} minus ${b}?`)};
 const QNAMES=['Mia','Pieter','Anke','Ruan','Liza'];
 const qWord=()=>{const nm=pick(QNAMES);
   if(Math.random()<.5){const a=rnd(1,6),b=rnd(1,Math.min(4,10-a));return numQ('Probleem',`${nm} het ${a} blokkies en kry nog ${b}. Hoeveel het ${nm} nou?`,`<div class="eq">${objs(a,'🧱')}<b>+</b>${objs(b,'🧱')}</div>`,a+b,1,10,`${a} plus ${b} is ${a+b}.`)}

@@ -67,7 +67,7 @@ for (const nm of QNAMES) {
 for (let a = 1; a <= 6; a++) for (let b = 1; b <= Math.min(5, 10 - a); b++)
   add(`Hoeveel is ${a} plus ${b}?`); // qAdd
 for (let a = 3; a <= 10; a++) for (let b = 1; b <= a - 1; b++)
-  add(`Hoeveel is ${a} min ${b}?`); // qSub
+  add(`Hoeveel is ${a} minus ${b}?`); // qSub (spoken: voluit "minus")
 for (let n = 1; n <= 10; n++) add(`Watter syfer is ${NAME[n]}?`); // qNameDig
 for (let n = 0; n <= 9; n++) add(`Watter getal kom ná ${n}?`); // qAfterBefore +
 for (let n = 2; n <= 10; n++) add(`Watter getal kom net voor ${n}?`); // qAfterBefore −
@@ -77,7 +77,7 @@ add(`Tel in 2's. Wat kom volgende?`); add(`Tel in 10's. Wat kom volgende?`); // 
 for (const g of RH) for (const w of g) add(`Watter woord rym met “${w[0]}”?`); // qRhyme
 for (const w of SY) add(`Klap die woord. Hoeveel lettergrepe het “${w[0]}”?`); // qSyll
 for (const w of BL) add(`Trek die klanke saam: ${w[2]}. Watter prentjie is dit?`); // qBlend
-for (const l of L) add(`Watter prentjie begin met die klank ${l}?`); // qSndPic (spoken, no quotes)
+for (const l of L) add(`Watter prentjie begin met die letter ${l}?`); // qSndPic (spoken, no quotes)
 for (const l of L) for (const w of W[l]) add(`Met watter klank begin die woord ${w[0]}?`); // qSndLetter
 for (const w of HFW) add(`Lees die woord. Tik dieselfde woord: “${w}”.`); // qHFW
 for (const k of ck) add(`Watter muntstuk is ${k.replace('R', 'R ')}?`); // qFindCoin (spoken)
