@@ -492,6 +492,10 @@ const genWeer=()=>shuffle([].concat(uniq(qWeather,3),uniq(qUmbrella,2),uniq(qFee
 
 /* ---------- quiz runner ---------- */
 const PRAISE=['Mooi so!','Fantasties!','Jy is slim!','Pragtig!','Wonderlik!','Baie goed!'];
+/* Spoken praise, personalised: what you read is what Adri says. */
+const PRAISE_SAID=PRAISE.map(p=>p.slice(0,-1)+', Chloé!');
+const DONE_SAID='Jy het jou beste probeer, Chloé!';
+function playPraise(t){if(!soundOn)return;try{t=t||pick(PRAISE_SAID);const h=cyrb53(t).toString(16);if(AFSET&&AFSET.has(h))afPlay([h])}catch(e){}}
 function setDots(n,i,res){$('#dots').innerHTML=Array.from({length:n},(_,k)=>`<span class="dot ${res[k]?'ok':k===i?'now':''}"></span>`).join('')}
 function runQuiz(tile,genOverride){
   const qs=(genOverride||tile.gen)();let i=0,firstTry=0;const res=[];
@@ -508,7 +512,7 @@ function runQuiz(tile,genOverride){
       if(solved)return;const o=q.opts[+b.dataset.k];const fb=$('#fb');
       if(o.ok){solved=true;b.classList.add('ok');$$('.opt',stage).forEach(x=>x.disabled=true);
         if(tries===0){firstTry++;res[i]=true;addStar(1)}
-        fb.className='fb good';fb.textContent=(tries===0?pick(PRAISE)+' ':'Jy het dit reggekry! ')+q.why;$('#next').disabled=false;$('#next').focus({preventScroll:true});setDots(qs.length,i,res)}
+        fb.className='fb good';fb.textContent=(tries===0?pick(PRAISE)+' ':'Jy het dit reggekry! ')+q.why;playPraise();$('#next').disabled=false;$('#next').focus({preventScroll:true});setDots(qs.length,i,res)}
       else{tries++;b.classList.add('no');b.disabled=true;fb_try(tries,q)}
     }));
     if(soundOn)speak(q.spoken,false);
@@ -521,7 +525,7 @@ function runQuiz(tile,genOverride){
 
 /* ---------- activities ---------- */
 function complete(tile,msg){
-  stopSpeech();state.done[tile.id]=true;save();
+  stopSpeech();playPraise(DONE_SAID);state.done[tile.id]=true;save();
   if(tile.id!=='gemeng')addStar(1);
   $('#stage').innerHTML=`<div class="card pad done"><div class="stk" aria-hidden="true">${tile.st}</div><h2>Jy het jou beste probeer!</h2><p>${msg}</p><p class="small">Jy het ’n nuwe sticker gekry.</p>
     <div class="actions"><button class="btn" id="again">Speel weer</button><button class="btn ghost" id="home2">Kies iets anders</button></div></div>`;
@@ -570,7 +574,7 @@ function runLuister(tile){
     $$('.pick').forEach(b=>b.addEventListener('click',()=>{
       const it=grid[+b.dataset.k];
       if(it===seq[step]){step++;b.classList.add('got');$$('#pips .pip').forEach((p,j)=>p.classList.toggle('on',j<step));
-        if(step===seq.length){if(miss===0){clean++;addStar(1)}const fb=$('#fb');fb.className='fb good';fb.textContent=pick(PRAISE);
+        if(step===seq.length){if(miss===0){clean++;addStar(1)}const fb=$('#fb');fb.className='fb good';fb.textContent=pick(PRAISE);playPraise();
           setTimeout(()=>{round++;if(round<lens.length)start();else{setDots(4,-1,[true,true,true,true]);complete(tile,`${clean} van 4 rondtes sonder foute.`)}},900)}}
       else{miss++;step=0;$$('.pick').forEach(x=>x.classList.remove('got'));$$('#pips .pip').forEach(p=>p.classList.remove('on'));b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
         const fb=$('#fb');fb.className='fb try';fb.textContent='Luister weer en begin van voor af.';if(soundOn)speakSeq(parts,text,false)}
