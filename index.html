@@ -1,0 +1,766 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Chloé se Graad R Avontuur</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: a sticker-book sheet. Subject sections of chunky tiles on a sky ground, then one big question card per screen. Thick ink outlines and hard offset shadows carry the personality. */
+:root{
+  --sky:#d6ecfa; --paper:#ffffff; --ink:#1f2f4d; --soft:#56678a;
+  --red:#e8543a; --green:#2f9e5f; --sun:#ffc533; --blue:#3b82d6;
+  --g-taal:#ffd5cb; --g-wisk:#ffe8a3; --g-lewe:#c9eddb; --g-kuns:#e3d8fa; --g-lyf:#ffd9b3;
+  --ok:#c4f0d3; --no:#ffd2c9; --guide:#8fa0c2;
+  --f-display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+  --f-body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--sky);color:var(--ink);font-family:var(--f-body);font-weight:600;font-size:17px;line-height:1.45;
+  padding-block:14px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0;line-height:1.2}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+.card{background:var(--paper);border:3px solid var(--ink);border-radius:22px;box-shadow:0 5px 0 var(--ink)}
+.pad{padding:clamp(16px,3vw,26px)}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand .logo{font-size:40px;line-height:1}
+.brand h1{font-size:clamp(1.2rem,3.4vw,1.7rem)}
+.brand p{font-size:.85rem;color:var(--soft)}
+.chips{display:flex;gap:10px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;border:3px solid var(--ink);border-radius:16px;background:#fff;padding:7px 12px;font-family:var(--f-display);font-weight:600;font-size:1.1rem;box-shadow:0 3px 0 var(--ink)}
+button.chip[aria-pressed="false"]{background:#e6ebf3;color:var(--soft)}
+.bump{animation:bump .5s}
+
+.hero{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:22px;background:var(--sun)}
+.hero h2{font-size:clamp(1.5rem,4vw,2.1rem)}
+.hero .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.note{background:#fff;border:3px dashed var(--ink);border-radius:16px;padding:10px 14px;font-size:.92rem;font-weight:600}
+
+.group{margin-bottom:26px}
+.group h2{font-size:1.25rem;margin:0 0 12px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.group h2 small{font-family:var(--f-body);font-weight:600;font-size:.82rem;color:var(--soft)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:140px;padding:14px;text-align:left;
+  border:3px solid var(--ink);border-radius:20px;box-shadow:0 5px 0 var(--ink);background:var(--tc,#fff);transition:transform .12s,box-shadow .12s}
+.tile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.tile .ic{font-size:40px;line-height:1}
+.tile b{font-family:var(--f-display);font-weight:600;font-size:1.1rem;line-height:1.2}
+.tile small{color:var(--soft);font-weight:600;font-size:.8rem;line-height:1.3}
+.tile .stk{position:absolute;right:10px;top:8px;font-size:30px;transform:rotate(10deg);filter:drop-shadow(0 2px 0 #fff)}
+.tile.gone{opacity:.98}
+
+.prac ul{margin:8px 0 0;padding-left:1.2em;display:grid;gap:4px}
+.prac li{font-size:.95rem}
+
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-block:4px 14px}
+.bar .ttl{font-family:var(--f-display);font-weight:600;font-size:1.15rem;flex:1;min-width:120px}
+.dots{display:flex;gap:6px;flex-wrap:wrap}
+.dot{width:13px;height:13px;border:2.5px solid var(--ink);border-radius:50%;background:#fff}
+.dot.now{background:var(--sun)}
+.dot.ok{background:var(--green)}
+.btn{font-family:var(--f-display);font-weight:600;font-size:1.05rem;padding:11px 18px;border:3px solid var(--ink);border-radius:16px;background:var(--sun);color:var(--ink);box-shadow:0 4px 0 var(--ink)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn.ghost{background:#fff}
+.btn.green{background:#8fe0ac}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+
+.qtag{display:inline-block;background:var(--g-taal);border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;font-size:.82rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+.qtext{font-size:clamp(1.3rem,3.6vw,1.9rem);text-align:center;margin:4px auto 8px;max-width:30ch}
+.visual{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;min-height:76px;padding:6px 0 12px;font-size:46px;line-height:1.15;text-align:center}
+.letter{font-family:var(--f-display);font-weight:600;font-size:6rem;line-height:1}
+.word{font-family:var(--f-display);font-weight:600;font-size:3.6rem;line-height:1.1;letter-spacing:.02em}
+.seq{font-family:var(--f-display);font-weight:600;font-size:3rem}
+.bigpic{display:flex;flex-direction:column;align-items:center;font-size:64px;line-height:1.1}
+.bigpic span{font-family:var(--f-display);font-weight:600;font-size:1.4rem}
+.objs{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:34px;line-height:1.1}
+.objs .fade{opacity:.25;filter:grayscale(1)}
+.eq{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px}
+.eq b{font-family:var(--f-display);font-size:2.4rem}
+.vs{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;width:100%}
+.grp{flex:1 1 150px;max-width:260px;min-height:110px;display:flex;align-items:center;justify-content:center;border:3px dashed var(--ink);border-radius:18px;padding:10px;background:#f6faff}
+.row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hint{font-size:.9rem;font-weight:800;color:var(--soft)}
+.qm{display:inline-flex;width:54px;height:54px;align-items:center;justify-content:center;border:3px dashed var(--ink);border-radius:14px;font-family:var(--f-display);font-size:2rem;background:#fff}
+.barsvg{width:100%;max-width:420px;height:auto}
+svg.shape{width:104px;height:104px}
+svg.coin{width:96px;height:96px}
+svg.note{width:150px;height:auto}
+svg.it{width:42px;height:42px}
+.sorted{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:320px}
+.picto{display:grid;gap:8px;width:100%;max-width:420px;text-align:left}
+.pr{display:flex;align-items:center;gap:12px;border:3px solid var(--ink);border-radius:14px;padding:6px 10px;background:#fffdf4}
+.pk{font-size:34px;border-right:3px solid var(--ink);padding-right:12px}
+.pc{font-size:28px;letter-spacing:.06em;word-break:break-all}
+
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:12px;max-width:640px;margin:8px auto 0}
+.opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:106px;padding:10px;background:#fff;border:3px solid var(--ink);border-radius:18px;box-shadow:0 4px 0 var(--ink);text-align:center}
+.opt:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.opt .pic{font-size:46px;line-height:1.1}
+.opt .big{font-family:var(--f-display);font-weight:600;font-size:2rem;line-height:1.1}
+.opt .lbl{font-weight:800;font-size:1rem}
+.opt svg{max-width:100%}
+.opt.ok{background:var(--ok)}
+.opt.no{background:var(--no);animation:shake .35s}
+.opt:disabled{cursor:default}
+.opt:disabled:not(.ok):not(.no){opacity:.7}
+.fb{min-height:52px;margin:14px auto 0;max-width:640px;text-align:center;font-weight:800;border-radius:14px;padding:10px 12px}
+.fb.good{background:var(--ok)}
+.fb.try{background:#fff0c2}
+
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;max-width:640px;margin:10px auto}
+.pick{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:3px solid var(--ink);border-radius:18px;background:#fff;box-shadow:0 4px 0 var(--ink);font-size:48px;line-height:1.1;position:relative}
+.pick span{font-size:.95rem;font-weight:800}
+.pick:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.pick.got{background:var(--ok)}
+.pick.no{animation:shake .35s;background:var(--no)}
+.pick .n{position:absolute;top:-10px;left:-8px;width:30px;height:30px;border-radius:50%;background:var(--sun);border:3px solid var(--ink);font-family:var(--f-display);font-size:1rem;display:flex;align-items:center;justify-content:center}
+.pips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.pip{width:22px;height:22px;border-radius:50%;border:3px solid var(--ink);background:#fff}
+.pip.on{background:var(--green)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:320px;margin:0 auto}
+.grid4>*{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(28px,8vw,40px);border:3px solid var(--ink);border-radius:14px;background:#fff;line-height:1}
+.grid4 button{box-shadow:0 3px 0 var(--ink)}
+.grid4 .fnd{background:var(--ok);box-shadow:0 0 0 4px var(--green)}
+.grid4 .mis{animation:shake .35s;background:var(--no)}
+.pair{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.pair>div{flex:1 1 260px;max-width:340px}
+.pair h3{font-size:1rem;text-align:center;margin-bottom:8px;color:var(--soft)}
+.checks{display:grid;gap:10px;max-width:560px;margin:12px auto}
+.checks label{display:flex;gap:12px;align-items:center;border:3px solid var(--ink);border-radius:16px;padding:10px 14px;background:#fff;cursor:pointer}
+.checks input{width:26px;height:26px;accent-color:var(--green);flex:none}
+.counter{display:flex;gap:16px;align-items:center;justify-content:center;margin:8px 0}
+.counter .num{font-family:var(--f-display);font-size:3.4rem;min-width:2ch;text-align:center}
+.counter button{width:56px;height:56px;font-size:1.8rem;padding:0}
+.chipsrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.chipsrow button{border:3px solid var(--ink);border-radius:14px;background:#fff;padding:6px 14px;font-family:var(--f-display);font-weight:600;font-size:1.05rem;box-shadow:0 3px 0 var(--ink)}
+.chipsrow button[aria-pressed="true"]{background:var(--sun)}
+.paper{position:relative;width:100%;border:3px solid var(--ink);border-radius:16px;background:#fff;overflow:hidden;touch-action:none}
+.paper canvas{display:block;width:100%;height:auto;touch-action:none}
+.paper canvas+canvas{position:absolute;inset:0;height:100%}
+.swatches{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.sw{width:44px;height:44px;border-radius:50%;border:3px solid var(--ink)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 4px var(--blue)}
+.field{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.field input{font:inherit;font-weight:800;padding:8px 12px;border:3px solid var(--ink);border-radius:12px;width:12ch;background:#fff;color:var(--ink)}
+.move{text-align:center;display:grid;gap:10px;justify-items:center}
+.move .ic{font-size:84px;line-height:1}
+.move h2{font-size:1.7rem}
+.move p{max-width:40ch}
+.clock{font-family:var(--f-display);font-size:3rem;min-height:1.2em}
+.done{text-align:center;display:grid;gap:12px;justify-items:center}
+.done .stk{font-size:96px;line-height:1;animation:pop .6s}
+.small{font-size:.9rem;color:var(--soft)}
+.toast{max-width:640px;margin:10px auto 0;text-align:center}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.25) rotate(-4deg)}100%{transform:scale(1)}}
+@keyframes pop{0%{transform:scale(.3) rotate(-20deg)}70%{transform:scale(1.15) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:420px){.letter{font-size:5rem}.word{font-size:3rem}.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo" aria-hidden="true">🐸</div><div><h1>Chloé se Graad R Avontuur</h1><p>Kwartaal 4 oefening</p></div></div>
+    <div class="chips">
+      <button class="chip" id="snd" aria-pressed="true" title="Stemlees aan of af">🔊 <span id="sndt">Stem aan</span></button>
+      <div class="chip" id="starchip" aria-live="polite">⭐ <span id="stars">0</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home">
+      <div class="hero card pad">
+        <h2>Kom ons speel en leer!</h2>
+        <p>Kies 'n prentjie. Die speletjie sê die vraag hardop as jou toestel 'n Afrikaanse stem het. Elke regte antwoord met die eerste probeer gee 'n ster.</p>
+        <div class="row">
+          <button class="btn" id="mix">🏆 Gemengde uitdaging</button>
+          <span class="small" id="progress"></span>
+        </div>
+        <div class="note"><b>Vir die grootmens:</b> Dit is oefening vir die huis, nie 'n amptelike assessering nie. Die onderwerpe volg die Kwartaal 4-assesseringsplan van Laerskool Tuine vir Graad R. Sit gerus langsaan en praat saam oor elke antwoord. Tik nie regte adresse of foonnommers in nie.</div>
+      </div>
+      <div id="groups"></div>
+      <div class="card pad prac">
+        <h2>Doen ook saam met papier en blokke</h2>
+        <p class="small">Sommige vaardighede werk beter met regte goed in die hand.</p>
+        <ul>
+          <li>Meet voorwerpe met hande, voete, blokkies en 'n liniaal of maatband (0 tot 10).</li>
+          <li>Bou 3D-konstruksies en bou 2D-prente met blokke oor.</li>
+          <li>Maak 'n legkaart van 45 stukke of meer klaar.</li>
+          <li>Sorteer speelgoed volgens twee eienskappe, soos kleur en soort.</li>
+          <li>Maak patrone met krale of blokke en skryf dit op 'n werkblad.</li>
+          <li>Tel in 10's tot 100 en vertel die naweeknuus met baie woorde.</li>
+          <li>Hou 'n boek reg vas en blaai van voor na agter.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="play" hidden>
+      <div class="bar">
+        <button class="btn ghost" id="back">⬅ Tuis</button>
+        <div class="ttl" id="ptitle"></div>
+        <div class="dots" id="dots" aria-hidden="true"></div>
+      </div>
+      <div id="stage"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- helpers ---------- */
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.from((r||document).querySelectorAll(s));
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=r[i];r[i]=r[j];r[j]=t}return r};
+const sample=(a,n)=>shuffle(a).slice(0,n);
+const INK='#1f2f4d';
+
+/* ---------- saved stars and stickers (this browser only) ---------- */
+const state={stars:0,done:{}};
+try{const s=JSON.parse(localStorage.getItem('chloe-q4')||'{}');if(s&&typeof s==='object'){state.stars=+s.stars||0;state.done=s.done&&typeof s.done==='object'?s.done:{}}}catch(e){}
+function save(){try{localStorage.setItem('chloe-q4',JSON.stringify(state))}catch(e){}}
+function addStar(n){state.stars+=n;save();const el=$('#stars');el.textContent=state.stars;const c=$('#starchip');c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}
+
+/* ---------- speech ---------- */
+let voices=[],soundOn=true,warned=false;
+function loadVoices(){try{voices=window.speechSynthesis.getVoices()||[]}catch(e){voices=[]}}
+if('speechSynthesis' in window){loadVoices();try{window.speechSynthesis.onvoiceschanged=loadVoices}catch(e){}}
+const afVoice=()=>voices.find(v=>/^af/i.test(v.lang));
+function speak(t,manual){
+  if(!('speechSynthesis' in window))return false;
+  const v=afVoice();
+  if(!v){if(manual&&!warned){warned=true;toast('Hierdie toestel het geen Afrikaanse stem nie. Lees die vraag saam met jou kind.')}return false}
+  try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=.85;window.speechSynthesis.speak(u)}catch(e){return false}
+  return true;
+}
+function stopSpeech(){try{window.speechSynthesis&&window.speechSynthesis.cancel()}catch(e){}}
+function toast(msg){const s=$('#stage');if(!s)return;let t=$('.toast',s);if(!t){t=document.createElement('div');t.className='note toast';s.appendChild(t)}t.textContent=msg}
+$('#snd').addEventListener('click',()=>{soundOn=!soundOn;$('#snd').setAttribute('aria-pressed',String(soundOn));$('#sndt').textContent=soundOn?'Stem aan':'Stem af';if(!soundOn)stopSpeech()});
+
+let cleanups=[];
+const onLeave=f=>cleanups.push(f);
+function leave(){cleanups.forEach(f=>{try{f()}catch(e){}});cleanups=[];stopSpeech()}
+
+/* ---------- builders ---------- */
+const pic=(e,l)=>`<span class="pic">${e}</span>${l?`<span class="lbl">${l}</span>`:''}`;
+const big=t=>`<span class="big">${t}</span>`;
+function mk(tag,q,visual,good,bad,why,spoken){
+  return {tag,q,visual:visual||'',why:why||'',spoken:spoken||q,opts:shuffle([{h:good,ok:true}].concat(bad.map(h=>({h,ok:false}))))};
+}
+function uniq(fn,n){const seen=new Set(),out=[];let g=0;while(out.length<n&&g++<80){const q=fn();const k=q.q+q.visual;if(!seen.has(k)){seen.add(k);out.push(q)}}return out}
+
+/* ---------- Afrikaans: sounds, rhyme, syllables, reading ---------- */
+const W={a:[['appel','🍎'],['arend','🦅']],b:[['bal','⚽'],['boom','🌳'],['brood','🍞'],['bril','👓']],d:[['dolfyn','🐬'],['deur','🚪']],
+e:[['eend','🦆'],['eier','🥚'],['eekhoring','🐿️']],f:[['fiets','🚲'],['foto','📷'],['friet','🍟']],g:[['gitaar','🎸'],['gorilla','🦍']],
+h:[['hond','🐶'],['huis','🏠'],['hoed','🎩']],i:[['inkvis','🦑']],j:[['jas','🧥'],['juweel','💎']],
+k:[['kat','🐱'],['kers','🍒'],['kasteel','🏰'],['kaas','🧀'],['koei','🐄']],l:[['leeu','🦁'],['lemoen','🍊'],['lamp','💡'],['lepel','🥄']],
+m:[['maan','🌙'],['muis','🐭'],['melk','🥛'],['mielie','🌽']],n:[['neus','👃'],['neushoring','🦏']],o:[['olifant','🐘'],['oog','👁️'],['ooi','🐑']],
+p:[['padda','🐸'],['pizza','🍕'],['piesang','🍌'],['potlood','✏️']],r:[['reën','🌧️'],['rok','👗'],['roos','🌹'],['ring','💍']],
+s:[['son','☀️'],['skoen','👟'],['slang','🐍'],['ster','⭐'],['sleutel','🔑']],t:[['trein','🚂'],['tamatie','🍅'],['tent','⛺'],['tier','🐅'],['tand','🦷']],
+u:[['uil','🦉'],['ui','🧅']],v:[['vis','🐟'],['vlinder','🦋'],['vark','🐷'],['vuur','🔥'],['voël','🐦']],w:[['wolk','☁️'],['wortel','🥕'],['walvis','🐳']],
+y:[['ys','🧊']],z:[['zebra','🦓']]};
+const L=Object.keys(W);
+function qSndPic(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter(x=>x!==l),2).map(x=>pick(W[x]));
+  return mk('Beginklank',`Watter prentjie begin met die klank “${l}”?`,`<div class="letter">${l}</div>`,pic(w[1],w[0]),o.map(x=>pic(x[1],x[0])),`“${w[0]}” begin met ${l}. Sê die woord stadig.`,`Watter prentjie begin met die klank ${l}?`)}
+function qSndLetter(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter(x=>x!==l),2);
+  return mk('Beginklank','Met watter klank begin hierdie woord?',`<div class="bigpic">${w[1]}<span>${w[0]}</span></div>`,big(l),o.map(big),`“${w[0]}” begin met ${l}.`,`Met watter klank begin die woord ${w[0]}?`)}
+const BL=[['vis','🐟','v – i – s'],['bal','⚽','b – a – l'],['kat','🐱','k – a – t'],['son','☀️','s – o – n'],['rok','👗','r – o – k'],['bed','🛏️','b – e – d'],['pot','🍲','p – o – t'],['lig','💡','l – i – g']];
+function qBlend(){const w=pick(BL);const o=sample(BL.filter(x=>x!==w),2);
+  return mk('Klanke saamvoeg',`Trek die klanke saam: ${w[2]}. Watter prentjie is dit?`,`<div class="seq">${w[2]}</div>`,pic(w[1],''),o.map(x=>pic(x[1],'')),`${w[2]} sê ons saam as “${w[0]}”.`,`Trek die klanke saam. ${w[2].replace(/ – /g,', ')}. Watter prentjie is dit?`)}
+const RH=[['vis','🐟','mis','🌫️'],['muis','🐭','huis','🏠'],['hond','🐶','mond','👄'],['tand','🦷','hand','🖐️','strand','🏖️'],['hoed','🎩','bloed','🩸'],['deur','🚪','kleur','🎨'],['pak','📦','sak','👜']]
+  .map(g=>{const r=[];for(let i=0;i<g.length;i+=2)r.push([g[i],g[i+1]]);return r});
+function qRhyme(){const gi=rnd(0,RH.length-1),g=RH[gi];const t=pick(g);const good=pick(g.filter(x=>x!==t));
+  const bad=sample(RH.filter((_,i)=>i!==gi),2).map(x=>pick(x));
+  return mk('Rym',`Watter woord rym met “${t[0]}”?`,`<div class="bigpic">${t[1]}<span>${t[0]}</span></div>`,pic(good[1],good[0]),bad.map(x=>pic(x[1],x[0])),`“${t[0]}” en “${good[0]}” eindig met dieselfde klank.`)}
+const SY=[['bal','⚽',1,'bal'],['vis','🐟',1,'vis'],['kat','🐱',1,'kat'],['boom','🌳',1,'boom'],['appel','🍎',2,'ap-pel'],['padda','🐸',2,'pad-da'],['vlinder','🦋',2,'vlin-der'],['kasteel','🏰',2,'kas-teel'],['piesang','🍌',2,'pie-sang'],
+['olifant','🐘',3,'o-li-fant'],['tamatie','🍅',3,'ta-ma-tie'],['bobbejaan','🐒',3,'bob-be-jaan'],['neushoring','🦏',3,'neus-ho-ring'],['eekhoring','🐿️',3,'eek-ho-ring'],['televisie','📺',4,'te-le-vi-sie'],['sjokolade','🍫',4,'sjo-ko-la-de']];
+function qSyll(){const w=pick(SY);const c=w[2];const set=c===1?[1,2,3]:c===4?[2,3,4]:[c-1,c,c+1];
+  return mk('Lettergrepe',`Klap die woord. Hoeveel lettergrepe het “${w[0]}”?`,`<div class="bigpic">${w[1]}<span>${w[0]}</span></div>`,big(c),set.filter(x=>x!==c).map(big),`${w[3]}: ${c} ${c===1?'klap':'klappe'}. Klap saam!`)}
+const SHORT=[].concat.apply([],L.map(l=>W[l])).filter(w=>w[0].length<=6);
+function qReadWord(){const w=pick(SHORT);const o=sample(SHORT.filter(x=>x[1]!==w[1]),2);
+  return mk('Lees',`Lees die woord. Watter prentjie pas daarby?`,`<div class="word">${w[0]}</div>`,pic(w[1],''),o.map(x=>pic(x[1],'')),`Die woord is “${w[0]}”.`)}
+function qBook(){const t=pick([
+  ['Waar begin ons lees op ’n bladsy?','Links bo',['Regs onder','Heel onder'],'Ons lees van links na regs en van bo na onder.'],
+  ['Hoe blaai ons deur ’n boek?','Van voor na agter',['Van agter na voor','Deur in die middel te begin'],'Ons maak die boek voor oop en blaai bladsy vir bladsy.']]);
+  return mk('Lees',t[0],'<div class="visual">📖</div>',big(t[1]).replace('big','big" style="font-size:1.2rem'),t[2].map(x=>big(x).replace('big','big" style="font-size:1.2rem')),t[3])}
+const genKlanke=()=>shuffle([].concat(uniq(qSndPic,4),uniq(qSndLetter,3),uniq(qBlend,3)));
+const genRym=()=>shuffle([].concat(uniq(qRhyme,5),uniq(qSyll,5)));
+const genLees=()=>shuffle([].concat(uniq(qReadWord,6),[qBook(),qBook()].filter((q,i,a)=>a.findIndex(z=>z.q===q.q)===i)));
+
+/* ---------- Wiskunde ---------- */
+const NAME=['nul','een','twee','drie','vier','vyf','ses','sewe','agt','nege','tien'];
+const ORD=['eerste','tweede','derde','vierde','vyfde'];
+const OBJ=['🍎','⭐','🐟','🎈','🦋','🍓','🐥','🚗','🌸','🍪'];
+function near(c,lo,hi){const s=new Set([c]);let g=0;while(s.size<3&&g++<80){const n=c+pick([-3,-2,-1,1,2,3]);if(n>=lo&&n<=hi)s.add(n)}return Array.from(s).filter(x=>x!==c)}
+const numQ=(tag,q,vis,c,lo,hi,why,sp)=>mk(tag,q,vis,big(c),near(c,lo,hi).map(big),why,sp);
+const objs=(n,e,fade,per)=>{fade=fade||0;per=per||5;return `<div class="objs" style="max-width:${per*44}px">${Array.from({length:n},(_,i)=>`<span class="${i>=n-fade?'fade':''}">${e}</span>`).join('')}</div>`};
+const tens=(n,e)=>{const a=Math.min(n,10),b=n-a;const r=k=>`<div class="objs" style="font-size:28px;flex-wrap:nowrap">${Array.from({length:k},()=>`<span>${e}</span>`).join('')}</div>`;return `<div style="display:grid;gap:6px;justify-items:start">${r(a)}${b?r(b):''}</div>`};
+const qCount=()=>{const n=rnd(1,10),e=pick(OBJ);return numQ('Tel','Tel saam. Hoeveel is daar?',objs(n,e),n,1,10,`Daar is ${n}. Tel elkeen net een keer.`)};
+const qCount20=()=>{const n=rnd(11,20),e=pick(OBJ);return numQ('Tel tot 20','Tel saam. Hoeveel is daar?',tens(n,e),n,11,20,`Tien en nog ${n-10} is ${n}.`)};
+const qDigName=()=>{const n=rnd(1,10);return mk('Getalname','Watter getalnaam pas by hierdie syfer?',`<div class="letter">${n}</div>`,big(NAME[n]),near(n,1,10).map(x=>big(NAME[x])),`${n} noem ons “${NAME[n]}”.`,`Watter getalnaam pas by die syfer ${n}?`)};
+const qNameDig=()=>{const n=rnd(1,10);return numQ('Getalsimbole','Watter syfer is dit?',`<div class="word">${NAME[n]}</div>`,n,1,10,`“${NAME[n]}” skryf ons as ${n}.`,`Watter syfer is ${NAME[n]}?`)};
+const qAfterBefore=()=>{const after=Math.random()<.5;const n=after?rnd(0,9):rnd(2,10);const c=after?n+1:n-1;
+  return numQ('Aan- en terugtel',after?`Watter getal kom ná ${n}?`:`Watter getal kom net voor ${n}?`,`<div class="letter">${n}</div>`,c,0,10,after?`Ná ${n} kom ${c}.`:`Net voor ${n} kom ${c}.`)};
+const qBack=()=>{const s=rnd(5,10),c=s-2;return numQ('Terugtel',`Tel terug: ${s}, ${s-1}, wat kom volgende?`,`<div class="seq">${s} · ${s-1} · ?</div>`,c,0,10,`${s}, ${s-1}, ${c}. Terug is elke keer een minder.`)};
+function qSkip(step){const k=rnd(3,4);const seq=Array.from({length:k},(_,i)=>step*(i+1));const c=step*(k+1);
+  const bad=step===2?[c+1,c+2]:[c+5,c+10];
+  return mk(`Tel in ${step}'s`,`Tel in ${step}'s. Wat kom volgende?`,`<div class="seq">${seq.join(' · ')} · ?</div>`,big(c),bad.map(big),`${seq.join(', ')}, ${c}. Elke keer kom ${step} by.`)}
+const genTel=()=>shuffle([].concat(uniq(qCount,3),[qCount20()],uniq(qDigName,2),[qNameDig(),qAfterBefore(),qBack(),qSkip(2),qSkip(10)]));
+const qAdd=()=>{const a=rnd(1,6),b=rnd(1,Math.min(5,10-a)),e=pick(OBJ),c=a+b;return numQ('Optel',`Hoeveel is ${a} plus ${b}?`,`<div class="eq">${objs(a,e)}<b>+</b>${objs(b,e)}</div>`,c,1,10,`${a} plus ${b} is ${c}. Tel aan vanaf ${a}.`)};
+const qSub=()=>{const a=rnd(3,10),b=rnd(1,a-1),e=pick(OBJ),c=a-b;return numQ('Aftrek',`Hoeveel is ${a} min ${b}?`,objs(a,e,b,5),c,0,10,`${a} min ${b} is ${c}. Die verbleikte prentjies gaan weg.`)};
+const qWord=()=>{const nm=pick(['Mia','Pieter','Anke','Ruan','Liza']);
+  if(Math.random()<.5){const a=rnd(1,6),b=rnd(1,Math.min(4,10-a));return numQ('Probleem',`${nm} het ${a} blokkies en kry nog ${b}. Hoeveel het ${nm} nou?`,`<div class="eq">${objs(a,'🧱')}<b>+</b>${objs(b,'🧱')}</div>`,a+b,1,10,`${a} plus ${b} is ${a+b}.`)}
+  const a=rnd(3,9),b=rnd(1,a-1);return numQ('Probleem',`${nm} het ${a} koekies en eet ${b}. Hoeveel bly oor?`,objs(a,'🍪',b,5),a-b,0,10,`${a} min ${b} is ${a-b}.`)};
+const genSomme=()=>shuffle([].concat(uniq(qAdd,4),uniq(qSub,3),uniq(qWord,3)));
+function qCompare(){const e=pick(OBJ),eq=Math.random()<.25;let a=rnd(1,9),b=eq?a:rnd(1,9);if(!eq&&a===b)b=a<9?a+1:a-1;
+  const more=Math.random()<.5;const q=`Watter groep het ${more?'MEER':'MINDER'}?`;const ans=eq?2:(more===(a>b)?0:1);
+  const o=[pic('⬅️','Links'),pic('➡️','Regs'),pic('⚖️','Ewe veel')];
+  return {tag:'Meer, minder, ewe veel',q,spoken:q.replace('MEER','meer').replace('MINDER','minder'),visual:`<div class="vs"><div class="grp">${objs(a,e)}</div><div class="grp">${objs(b,e)}</div></div>`,
+    why:eq?'Albei groepe is ewe veel.':`${Math.max(a,b)} is meer as ${Math.min(a,b)}.`,opts:o.map((h,i)=>({h,ok:i===ans}))}}
+const ANIM=['🐶','🐱','🐰','🐸','🐷','🐮','🦁','🐵','🐼','🐔'];
+function qOrdinal(){const row=sample(ANIM,5);const i=rnd(0,4);const bad=sample(row.filter((_,k)=>k!==i),2);
+  return mk('Ordinale getalle',`Wie is die ${ORD[i]} in die ry?`,`<div class="row"><span class="hint">begin ➜</span>${row.map(e=>`<span>${e}</span>`).join('')}</div>`,pic(row[i],''),bad.map(e=>pic(e,'')),`Tel van links af: ${row.slice(0,i+1).join(' ')}. Die ${ORD[i]} is ${row[i]}.`)}
+const genMeer=()=>shuffle([].concat(uniq(qCompare,4),uniq(qOrdinal,4)));
+const PAT=['🔴','🔵','🟡','🟢','🟣','🟠','⭐','❤️','🌙','🍎','🔷','🌸'];
+function qPattern(){const kind=pick(['abc','abc','abc','aab','abb']);const t=sample(PAT,3);const a=t[0],b=t[1],c=t[2];
+  const unit=kind==='abc'?[a,b,c]:kind==='aab'?[a,a,b]:[a,b,b];let full=[];for(let r=0;r<4;r++)full=full.concat(unit);
+  const len=unit.length*2+rnd(1,unit.length-1);const shown=full.slice(0,len),ans=full[len];
+  let bad=shuffle(Array.from(new Set(unit)).filter(x=>x!==ans));while(bad.length<2){const x=pick(PAT);if(x!==ans&&bad.indexOf(x)<0)bad.push(x)}
+  return mk('Patrone','Watter prentjie kom volgende in die patroon?',`<div class="row">${shown.map(x=>`<span>${x}</span>`).join('')}<span class="qm">?</span></div>`,pic(ans,''),bad.slice(0,2).map(x=>pic(x,'')),`Die patroon herhaal: ${unit.join(' ')}`)}
+const genPatrone=()=>uniq(qPattern,8);
+
+/* measuring */
+const COL={rooi:['#e8543a','🔴'],blou:['#3b82d6','🔵'],groen:['#2f9e5f','🟢'],geel:['#ffc533','🟡']};
+function barsSvg(list){const u=26;let y=6,s='';list.forEach(x=>{s+=`<rect x="6" y="${y}" width="${x[1]*u}" height="22" rx="6" fill="${COL[x[0]][0]}" stroke="${INK}" stroke-width="3"/>`;y+=34});return `<svg viewBox="0 0 ${12+10*u} ${y}" class="barsvg" role="img" aria-label="Gekleurde stawe van verskillende lengtes">${s}</svg>`}
+const cOpt=c=>pic(COL[c][1],c);
+function qLongest(){const longest=Math.random()<.5;const cs=sample(Object.keys(COL),3);const ls=sample([2,3,4,5,6,7,8,9,10],3);
+  const idx=ls.indexOf(longest?Math.max.apply(null,ls):Math.min.apply(null,ls));
+  return mk('Lank en kort',`Watter staaf is die ${longest?'langste':'kortste'}?`,barsSvg(cs.map((c,i)=>[c,ls[i]])),cOpt(cs[idx]),cs.filter((_,i)=>i!==idx).map(cOpt),longest?'Die langste staaf strek die verste.':'Die kortste staaf strek die minste ver.')}
+function qEqualLen(){const cs=sample(Object.keys(COL),4);const ls=sample([2,3,4,5,6,7,8,9],2);const l=[ls[0],ls[0],ls[1],ls[1]===ls[0]?ls[1]+1:ls[1]];
+  const rows=shuffle([0,1,2,3]);const order=rows.map(i=>[cs[i],l[i]]);
+  return mk('Ewe lank',`Watter staaf is ewe lank as die ${cs[0]} een?`,barsSvg(order),cOpt(cs[1]),[cs[2],cs[3]].map(cOpt),`Die ${cs[0]} en ${cs[1]} stawe is ewe lank.`)}
+function blocksSvg(n){const u=26,w=12+10*u;let b='';for(let i=0;i<n;i++)b+=`<rect x="${6+i*u}" y="46" width="${u}" height="${u}" fill="#ffe9a8" stroke="${INK}" stroke-width="3"/>`;
+  return `<svg viewBox="0 0 ${w} 84" class="barsvg" role="img" aria-label="Potlood bo 'n ry blokkies"><rect x="6" y="8" width="${n*u}" height="26" rx="6" fill="#ffc533" stroke="${INK}" stroke-width="3"/><rect x="6" y="8" width="14" height="26" rx="6" fill="#f3a6b6" stroke="${INK}" stroke-width="3"/>${b}</svg>`}
+const qBlocks=()=>{const n=rnd(2,9);return numQ('Meet met blokkies','Hoeveel blokkies lank is die potlood?',blocksSvg(n),n,1,10,`Die potlood is ${n} blokkies lank. Tel die blokkies onder die potlood.`)};
+function rulerSvg(n){const x0=14,u=28;let t='';for(let i=0;i<=10;i++){t+=`<line x1="${x0+i*u}" y1="58" x2="${x0+i*u}" y2="76" stroke="${INK}" stroke-width="2.5"/><text x="${x0+i*u}" y="98" text-anchor="middle" font-size="15" font-weight="800" fill="${INK}" font-family="Nunito,sans-serif">${i}</text>`}
+  return `<svg viewBox="0 0 ${x0*2+10*u} 108" class="barsvg" role="img" aria-label="Liniaal met 'n kryt"><rect x="${x0}" y="14" width="${n*u}" height="28" rx="6" fill="#e8543a" stroke="${INK}" stroke-width="3"/><rect x="${x0-8}" y="52" width="${10*u+16}" height="52" rx="8" fill="#ffe9a8" stroke="${INK}" stroke-width="3"/>${t}</svg>`}
+const qRuler=()=>{const n=rnd(2,9);return numQ('Liniaal','Hoe lank is die kryt? Lees die getal op die liniaal.',rulerSvg(n),n,1,10,`Die kryt eindig by ${n} op die liniaal.`)};
+const COINS={'5c':[22,'#c98a4b'],'10c':[25,'#c98a4b'],'20c':[28,'#c98a4b'],'50c':[31,'#c98a4b'],'R1':[30,'#cfd6df'],'R2':[34,'#cfd6df'],'R5':[38,'#cfd6df']};
+const NOTES={'R10':'#4caf6a','R20':'#b98a5e','R50':'#e0604f','R100':'#5b8fd9','R200':'#f2a03d'};
+const VAL={'5c':5,'10c':10,'20c':20,'50c':50,R1:100,R2:200,R5:500,R10:1000,R20:2000,R50:5000,R100:10000,R200:20000};
+const coinSvg=k=>{const c=COINS[k];return `<svg viewBox="0 0 100 100" class="coin" role="img" aria-label="${k} muntstuk"><circle cx="50" cy="50" r="${c[0]+6}" fill="${c[1]}" stroke="${INK}" stroke-width="4"/><circle cx="50" cy="50" r="${c[0]-3}" fill="none" stroke="${INK}" stroke-opacity=".35" stroke-width="2"/><text x="50" y="${k.length>2?59:60}" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="600" font-size="${k.length>2?25:30}" fill="${INK}">${k}</text></svg>`};
+const noteSvg=k=>`<svg viewBox="0 0 160 90" class="note" role="img" aria-label="${k} noot"><rect x="4" y="6" width="152" height="78" rx="8" fill="${NOTES[k]}" stroke="${INK}" stroke-width="4"/><rect x="14" y="16" width="132" height="58" rx="5" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/><text x="80" y="58" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="600" font-size="34" fill="${INK}">${k}</text></svg>`;
+const money=k=>COINS[k]?coinSvg(k):noteSvg(k);
+const ck=Object.keys(COINS),nk=Object.keys(NOTES),ak=ck.concat(nk);
+const qCoinName=()=>{const k=pick(ck);return mk('Muntstukke','Hoeveel is hierdie muntstuk werd?',money(k),big(k),sample(ck.filter(x=>x!==k),2).map(big),`Dit is ${k}.`)};
+const qFindCoin=()=>{const k=pick(ck);return mk('Muntstukke',`Watter muntstuk is ${k}?`,'',money(k),sample(ck.filter(x=>x!==k),2).map(money),`Die ${k}-muntstuk het ${k} op.`,`Watter muntstuk is ${k.replace('R','R ')}?`)};
+const qFindNote=()=>{const k=pick(nk);return mk('Note',`Watter noot is ${k}?`,'',money(k),sample(nk.filter(x=>x!==k),2).map(money),`Die ${k}-noot het ${k} op.`,`Watter noot is ${k.replace('R','R ')}?`)};
+const qMoreMoney=()=>{const p=sample(ak,2);if(VAL[p[0]]===VAL[p[1]])return qMoreMoney();const hi=VAL[p[0]]>VAL[p[1]]?0:1;
+  return mk('Meer werd','Watter een is meer werd?','',money(p[hi]),[money(p[1-hi])],`${p[hi]} is meer werd as ${p[1-hi]}.`)};
+const qCoinNote=()=>{const k=pick(ak);const isCoin=!!COINS[k];return mk('Muntstuk of noot','Is dit ’n muntstuk of ’n noot?',money(k),big(isCoin?'Muntstuk':'Noot').replace('big','big" style="font-size:1.4rem'),[big(isCoin?'Noot':'Muntstuk').replace('big','big" style="font-size:1.4rem')],isCoin?'Muntstukke is rond en van metaal.':'Note is van papier of plastiek en reghoekig.')};
+const genMeting=()=>shuffle([].concat(uniq(qLongest,3),[qEqualLen()],uniq(qBlocks,2),uniq(qRuler,2)));
+const genGeld=()=>shuffle([].concat(uniq(qCoinName,2),uniq(qFindCoin,2),uniq(qFindNote,2),uniq(qMoreMoney,2),uniq(qCoinNote,2)));
+
+/* shapes and space */
+const SC=['#e8543a','#3b82d6','#ffc533','#2f9e5f','#8a5cc7','#f08a3c'];
+const S2={sirkel:'<circle cx="50" cy="50" r="40"/>',vierkant:'<rect x="14" y="14" width="72" height="72"/>',driehoek:'<polygon points="50,12 90,86 10,86"/>',reghoek:'<rect x="6" y="28" width="88" height="44"/>',ovaal:'<ellipse cx="50" cy="50" rx="44" ry="28"/>',ruit:'<polygon points="50,6 90,50 50,94 10,50"/>'};
+const shape2=(n,c)=>`<svg viewBox="0 0 100 100" class="shape" role="img" aria-label="${n}"><g fill="${c||pick(SC)}" stroke="${INK}" stroke-width="4" stroke-linejoin="round">${S2[n]}</g></svg>`;
+const S3={
+ sfeer:c=>`<defs><radialGradient id="g${c.slice(1)}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".45" stop-color="${c}"/><stop offset="1" stop-color="${c}"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(#g${c.slice(1)})" stroke="${INK}" stroke-width="4"/>`,
+ kubus:c=>`<polygon points="50,10 85,28 50,46 15,28" fill="${c}"/><polygon points="15,28 50,46 50,90 15,72" fill="${c}" fill-opacity=".72"/><polygon points="50,46 85,28 85,72 50,90" fill="${c}" fill-opacity=".5"/>`,
+ 'reghoekige prisma':c=>`<polygon points="40,16 94,32 62,46 8,30" fill="${c}"/><polygon points="8,30 62,46 62,86 8,70" fill="${c}" fill-opacity=".72"/><polygon points="62,46 94,32 94,72 62,86" fill="${c}" fill-opacity=".5"/>`,
+ silinder:c=>`<path d="M20 26 V74 A30 11 0 0 0 80 74 V26 Z" fill="${c}" fill-opacity=".72"/><ellipse cx="50" cy="26" rx="30" ry="11" fill="${c}"/>`,
+ 'keël':c=>`<path d="M50 8 L84 76 A34 12 0 0 1 16 76 Z" fill="${c}" fill-opacity=".8"/>`,
+ piramide:c=>`<polygon points="50,8 10,68 54,90" fill="${c}" fill-opacity=".75"/><polygon points="50,8 54,90 92,64" fill="${c}" fill-opacity=".5"/>`
+};
+const shape3=(n,c)=>{c=c||pick(SC);return `<svg viewBox="0 0 100 100" class="shape" role="img" aria-label="${n}"><g stroke="${INK}" stroke-width="4" stroke-linejoin="round">${S3[n](c)}</g></svg>`};
+const n2=Object.keys(S2),n3=Object.keys(S3);
+const qName2=()=>{const n=pick(n2);return mk('2D-vorms','Watter vorm is dit?',shape2(n),big(n).replace('big','big" style="font-size:1.5rem'),sample(n2.filter(x=>x!==n),2).map(x=>big(x).replace('big','big" style="font-size:1.5rem')),`Dit is ’n ${n}.`)};
+const qFind2=()=>{const n=pick(n2);return mk('2D-vorms',`Wys die ${n}.`,'',shape2(n),sample(n2.filter(x=>x!==n),2).map(x=>shape2(x)),`Dit is die ${n}.`)};
+const qName3=()=>{const n=pick(n3);return mk('3D-vorms','Watter 3D-vorm is dit?',shape3(n),big(n).replace('big','big" style="font-size:1.35rem'),sample(n3.filter(x=>x!==n),2).map(x=>big(x).replace('big','big" style="font-size:1.35rem')),`Dit is ’n ${n}.`)};
+const qRoll=()=>mk('3D-vorms','Watter vorm kan rol soos ’n bal?','',shape3('sfeer'),['kubus','piramide'].map(x=>shape3(x)),'’n Sfeer is rond oral en kan rol.');
+const genVorm=()=>shuffle([].concat(uniq(qName2,3),uniq(qFind2,2),uniq(qName3,3),[qRoll()]));
+function qLeftRight(){const left=Math.random()<.5;const row=sample(ANIM,3);const t=left?row[0]:row[2];
+  return mk('Links en regs',`Kyk na die ry. Watter een is heel ${left?'links':'regs'}?`,`<div class="row">${row.map(e=>`<span>${e}</span>`).join('')}</div>`,pic(t,''),row.filter(x=>x!==t).map(e=>pic(e,'')),`Heel ${left?'links':'regs'} is ${t}.`)}
+const qArrow=()=>{const left=Math.random()<.5;return mk('Links en regs',`Watter pyl wys na ${left?'links':'regs'}?`,'',pic(left?'⬅️':'➡️',''),[pic(left?'➡️':'⬅️',''),pic('⬆️','')],`Dié pyl wys na ${left?'links':'regs'}.`)};
+const qHand=()=>{const r=Math.random()<.5;return mk('Links en regs',`Steek jou ${r?'regter':'linker'}hand op. Watter hand is dit?`,'<div class="visual">🙋</div>',big(r?'Regs':'Links'),[big(r?'Links':'Regs')],`Jou ${r?'regter':'linker'}hand is die een wat ${r?'regs':'links'} is.`)};
+const SYM=[['<path d="M50 88 C10 55 8 22 32 18 C42 17 48 24 50 30 C52 24 58 17 68 18 C92 22 90 55 50 88Z"/>'],['<polygon points="50,8 85,40 50,92 15,40"/>'],['<circle cx="50" cy="50" r="38"/>'],['<polygon points="50,10 92,86 8,86"/>']];
+const ASY=[['<polygon points="25,25 95,25 75,80 5,80"/>'],['<polygon points="20,82 12,34 56,10 92,46 62,90"/>'],['<polygon points="12,86 92,76 60,14"/>']];
+const rawSvg=p=>`<svg viewBox="0 0 100 100" class="shape" role="img" aria-label="vorm"><g fill="${pick(SC)}" stroke="${INK}" stroke-width="4" stroke-linejoin="round">${p[0]}</g></svg>`;
+const qSym=()=>mk('Simmetrie','Watter vorm kan jy in twee ewe groot, dieselfde helftes verdeel?','',rawSvg(pick(SYM)),sample(ASY,2).map(rawSvg),'Vou die vorm in die middel. Die twee helftes val presies op mekaar.');
+const genRuimte=()=>shuffle([].concat(uniq(qLeftRight,3),uniq(qArrow,2),[qHand()],uniq(qSym,3)));
+
+/* data handling */
+const DC={rooi:'#e8543a',blou:'#3b82d6',geel:'#ffc533'};
+const DS={sirkel:c=>`<circle cx="20" cy="20" r="15" fill="${c}" stroke="${INK}" stroke-width="3"/>`,vierkant:c=>`<rect x="5" y="5" width="30" height="30" fill="${c}" stroke="${INK}" stroke-width="3"/>`,driehoek:c=>`<polygon points="20,5 36,35 4,35" fill="${c}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`};
+const PL={sirkel:'sirkels',vierkant:'vierkante',driehoek:'driehoeke'};
+const dsvg=(c,s)=>`<svg viewBox="0 0 40 40" class="it" role="img" aria-label="${c} ${s}">${DS[s](DC[c])}</svg>`;
+function qSort(){const cs=Object.keys(DC),ss=Object.keys(DS);const tc=pick(cs),ts=pick(ss);const t=rnd(1,4);let items=[];for(let i=0;i<t;i++)items.push([tc,ts]);
+  while(items.length<10){const c=pick(cs),s=pick(ss);if(c===tc&&s===ts)continue;items.push([c,s])}
+  items=shuffle(items);
+  return numQ('Sorteer',`Hoeveel ${tc} ${PL[ts]} is daar?`,`<div class="sorted">${items.map(x=>dsvg(x[0],x[1])).join('')}</div>`,t,0,6,`Kyk na kleur én vorm. Daar is ${t} ${tc} ${PL[ts]}.`)}
+const FR=[['🍎','appels'],['🍌','piesangs'],['🍇','druiwe'],['🍓','aarbeie'],['🍊','lemoene']];
+function qPicto(){const f=sample(FR,3);const n=sample([1,2,3,4,5,6],3);const rows=f.map((x,i)=>[x[0],x[1],n[i]]);
+  const vis=`<div class="picto">${rows.map(r=>`<div class="pr"><span class="pk">${r[0]}</span><span class="pc">${r[0].repeat(r[2])}</span></div>`).join('')}</div>`;
+  const kind=pick(['most','least','count','diff']);
+  const srt=rows.slice().sort((a,b)=>b[2]-a[2]);
+  if(kind==='most')return mk('Piktogram','Watter ry het die meeste?',vis,pic(srt[0][0],srt[0][1]),srt.slice(1).map(r=>pic(r[0],r[1])),`${srt[0][1]} het ${srt[0][2]}. Dit is die meeste.`);
+  if(kind==='least')return mk('Piktogram','Watter ry het die minste?',vis,pic(srt[2][0],srt[2][1]),srt.slice(0,2).map(r=>pic(r[0],r[1])),`${srt[2][1]} het ${srt[2][2]}. Dit is die minste.`);
+  if(kind==='count'){const r=pick(rows);return numQ('Piktogram',`Hoeveel ${r[1]} is daar?`,vis,r[2],0,7,`Tel die ${r[1]}: ${r[2]}.`)}
+  const d=srt[0][2]-srt[2][2];return numQ('Piktogram',`Hoeveel meer ${srt[0][1]} as ${srt[2][1]} is daar?`,vis,d,0,6,`${srt[0][2]} min ${srt[2][2]} is ${d}.`)}
+const genData=()=>shuffle([].concat(uniq(qSort,4),uniq(qPicto,4)));
+
+/* ---------- Lewensvaardigheid ---------- */
+const DAYS=['Maandag','Dinsdag','Woensdag','Donderdag','Vrydag','Saterdag','Sondag'];
+const MONTHS=['Januarie','Februarie','Maart','April','Mei','Junie','Julie','Augustus','September','Oktober','November','Desember'];
+const tx=(t,f)=>big(t).replace('big','big" style="font-size:'+(f||1.3)+'rem');
+function ring(arr,i,d){return arr[(i+d+arr.length)%arr.length]}
+function qDay(){const i=rnd(0,6);const k=pick(['na','voor','gister','more']);
+  const ans=k==='na'||k==='more'?ring(DAYS,i,1):ring(DAYS,i,-1);
+  const q=k==='na'?`Watter dag kom ná ${DAYS[i]}?`:k==='voor'?`Watter dag kom voor ${DAYS[i]}?`:k==='gister'?`Vandag is ${DAYS[i]}. Watter dag was gister?`:`Vandag is ${DAYS[i]}. Watter dag is môre?`;
+  return mk('Dae van die week',q,'<div class="visual">📅</div>',tx(ans),sample(DAYS.filter(d=>d!==ans&&d!==DAYS[i]),2).map(d=>tx(d)),`Die week gaan so: ${DAYS.join(', ')}.`)}
+function qMonth(){const i=rnd(0,11);const after=Math.random()<.5;const ans=ring(MONTHS,i,after?1:-1);
+  return mk('Maande van die jaar',after?`Watter maand kom ná ${MONTHS[i]}?`:`Watter maand kom voor ${MONTHS[i]}?`,'<div class="visual">🗓️</div>',tx(ans,1.15),sample(MONTHS.filter(m=>m!==ans&&m!==MONTHS[i]),2).map(m=>tx(m,1.15)),`${ring(MONTHS,i,-1)}, ${MONTHS[i]}, ${ring(MONTHS,i,1)}.`)}
+const SEAS=[['Winter','❄️','Dit is koud en ons dra warm jasse en kouse.'],['Herfs','🍂','Die blare verkleur en val van die bome af.'],['Lente','🌷','Baie blomme begin blom en dit raak warmer.'],['Somer','☀️','Dit is baie warm en ons gaan swem.']];
+function qSeason(){const s=pick(SEAS);return mk('Seisoene',`${s[2]} Watter seisoen is dit?`,'',pic(s[1],s[0]),sample(SEAS.filter(x=>x!==s),2).map(x=>pic(x[1],x[0])),`Dit is ${s[0].toLowerCase()}.`)}
+const genTyd=()=>shuffle([].concat(uniq(qDay,3),uniq(qMonth,3),uniq(qSeason,3),[mk('Tyd','Hoeveel dae is daar in ’n week?','<div class="visual">📅</div>',big(7),[big(5),big(10)],'Daar is 7 dae in ’n week.')]));
+const WEA=[['☀️','sonnig'],['🌧️','reën'],['☁️','bewolk'],['🌬️','winderig'],['⛈️','donderstorm'],['🌫️','mistig']];
+const FEEL=[['😊','gelukkig'],['😢','hartseer'],['😠','kwaad'],['😨','bang'],['😴','moeg'],['🤩','opgewonde'],['😮','verbaas']];
+const qWeather=()=>{const w=pick(WEA);return mk('Weer','Watter weer is dit?',`<div class="visual" style="font-size:80px">${w[0]}</div>`,tx(w[1]),sample(WEA.filter(x=>x!==w),2).map(x=>tx(x[1])),`Dit is ${w[1]}.`)};
+const qUmbrella=()=>{const t=pick([['Ons gebruik ’n sambreel. Watter weer is dit?','🌧️','reën'],['Ons smeer sonroom aan. Watter weer is dit?','☀️','sonnig'],['Ons vlieg ’n vlieër. Watter weer is dit?','🌬️','winderig']]);
+  const o=WEA.filter(x=>x[1]!==t[2]);return mk('Weer',t[0],'',pic(t[1],t[2]),sample(o,2).map(x=>pic(x[0],x[1])),`Dit is ${t[2]}.`)};
+const qFeel=()=>{const f=pick(FEEL);return mk('Emosies','Hoe voel hierdie gesig?',`<div class="visual" style="font-size:84px">${f[0]}</div>`,tx(f[1]),sample(FEEL.filter(x=>x!==f),2).map(x=>tx(x[1])),`Dié gesig is ${f[1]}.`)};
+const genWeer=()=>shuffle([].concat(uniq(qWeather,3),uniq(qUmbrella,2),uniq(qFeel,4)));
+
+/* ---------- quiz runner ---------- */
+const PRAISE=['Mooi so!','Fantasties!','Jy is slim!','Pragtig!','Wonderlik!','Baie goed!'];
+function setDots(n,i,res){$('#dots').innerHTML=Array.from({length:n},(_,k)=>`<span class="dot ${res[k]?'ok':k===i?'now':''}"></span>`).join('')}
+function runQuiz(tile,genOverride){
+  const qs=(genOverride||tile.gen)();let i=0,firstTry=0;const res=[];
+  const stage=$('#stage');
+  function show(){
+    const q=qs[i];let tries=0,solved=false;
+    setDots(qs.length,i,res);
+    stage.innerHTML=`<div class="card pad"><div style="text-align:center"><span class="qtag">${q.tag}</span></div><h2 class="qtext">${q.q}</h2><div class="visual">${q.visual}</div>
+      <div class="opts">${q.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.h}</button>`).join('')}</div>
+      <div class="fb" id="fb" aria-live="polite"></div>
+      <div class="actions"><button class="btn ghost" id="listen">🔊 Luister</button><button class="btn" id="next" disabled>${i===qs.length-1?'Klaar ✔':'Volgende ➜'}</button></div></div>`;
+    $('#listen').addEventListener('click',()=>speak(q.spoken,true));
+    $$('.opt',stage).forEach(b=>b.addEventListener('click',()=>{
+      if(solved)return;const o=q.opts[+b.dataset.k];const fb=$('#fb');
+      if(o.ok){solved=true;b.classList.add('ok');$$('.opt',stage).forEach(x=>x.disabled=true);
+        if(tries===0){firstTry++;res[i]=true;addStar(1)}
+        fb.className='fb good';fb.textContent=(tries===0?pick(PRAISE)+' ':'Jy het dit reggekry! ')+q.why;$('#next').disabled=false;$('#next').focus({preventScroll:true});setDots(qs.length,i,res)}
+      else{tries++;b.classList.add('no');b.disabled=true;fb_try(tries,q)}
+    }));
+    if(soundOn)speak(q.spoken,false);
+    function fb_try(t,q){const fb=$('#fb');fb.className='fb try';fb.textContent=t>=2?'Wenk: '+q.why:'Bykans! Probeer nog ’n keer.'}
+    $('#next').addEventListener('click',()=>{i++;if(i<qs.length)show();else finish()});
+  }
+  function finish(){setDots(qs.length,-1,res);complete(tile,`Jy het ${firstTry} van ${qs.length} vrae met die eerste probeer reg gehad.`)}
+  show();
+}
+
+/* ---------- activities ---------- */
+function complete(tile,msg){
+  stopSpeech();state.done[tile.id]=true;save();
+  if(tile.id!=='gemeng')addStar(1);
+  $('#stage').innerHTML=`<div class="card pad done"><div class="stk" aria-hidden="true">${tile.st}</div><h2>Jy het jou beste probeer!</h2><p>${msg}</p><p class="small">Jy het ’n nuwe sticker gekry.</p>
+    <div class="actions"><button class="btn" id="again">Speel weer</button><button class="btn ghost" id="home2">Kies iets anders</button></div></div>`;
+  $('#again').addEventListener('click',()=>openTile(tile));$('#home2').addEventListener('click',showHome);
+}
+function stageCard(html){$('#stage').innerHTML=`<div class="card pad">${html}</div>`}
+
+/* spot the differences */
+function runVerskille(tile){
+  const pool=['🌳','🌸','🏠','🐶','☀️','🦋','🐝','🍎','🌈','⛅','🐦','🚗','🌻','🐱','🍄','🐞','🍓','🎈','🐟','🌙','⭐','🦆','🐸','🍌'];
+  const base=sample(pool,16),rest=pool.filter(x=>base.indexOf(x)<0);
+  const diff=new Set(sample(Array.from({length:16},(_,k)=>k),8));
+  const alt=base.map((e,k)=>diff.has(k)?pick(rest):e);
+  const found=new Set();
+  stageCard(`<div style="text-align:center"><span class="qtag">Verskille en ooreenkomste</span></div><h2 class="qtext">Vind die 8 verskille. Tik in die regter prent.</h2>
+   <div class="pair"><div><h3>Prent A</h3><div class="grid4" id="ga">${base.map((e,k)=>`<div data-k="${k}">${e}</div>`).join('')}</div></div>
+   <div><h3>Prent B</h3><div class="grid4" id="gb">${alt.map((e,k)=>`<button data-k="${k}" aria-label="Blokkie ${k+1}">${e}</button>`).join('')}</div></div></div>
+   <div class="pips" id="pips" aria-hidden="true">${Array.from({length:8},()=>'<span class="pip"></span>').join('')}</div>
+   <div class="fb" id="fb" aria-live="polite">Gevind: 0 van 8</div>
+   <p class="small" style="text-align:center">Praat saam: Wat is dieselfde in albei prente? Wat is anders?</p>`);
+  $$('#gb button').forEach(b=>b.addEventListener('click',()=>{
+    const k=+b.dataset.k;
+    if(diff.has(k)&&!found.has(k)){found.add(k);b.classList.add('fnd');$('#ga [data-k="'+k+'"]').classList.add('fnd');
+      $$('#pips .pip').forEach((p,j)=>p.classList.toggle('on',j<found.size));const fb=$('#fb');fb.className='fb good';fb.textContent=`Gevind: ${found.size} van 8`;
+      if(found.size===8)setTimeout(()=>{addStar(2);complete(tile,'Jy het al 8 verskille gevind!')},700)}
+    else if(!diff.has(k)){b.classList.remove('mis');void b.offsetWidth;b.classList.add('mis');const fb=$('#fb');fb.className='fb try';fb.textContent='Dié twee is dieselfde. Soek verder.'}
+  }));
+}
+
+/* listen and do */
+function runLuister(tile){
+  const ITEMS=[['ster','⭐'],['hart','❤️'],['maan','🌙'],['blom','🌸'],['vis','🐟'],['bal','⚽'],['boom','🌳'],['son','☀️'],['huis','🏠'],['kat','🐱']];
+  const lens=[2,3,4,5];let round=0,clean=0;
+  function start(){
+    const grid=sample(ITEMS,6);const seq=sample(grid,lens[round]);let step=0,miss=0;
+    const text='Tik '+seq.map(x=>'die '+x[0]).join(', dan ')+'.';
+    setDots(4,round,Array.from({length:round},()=>true));
+    stageCard(`<div style="text-align:center"><span class="qtag">Luister en doen · ${lens[round]} opdragte</span></div><h2 class="qtext">Luister mooi en tik in die regte volgorde.</h2>
+      <p class="small" style="text-align:center">Grootmens: lees dit hardop as daar geen stem is. “${text}”</p>
+      <div class="actions" style="margin-top:8px"><button class="btn ghost" id="again2">🔊 Luister weer</button></div>
+      <div class="cards3" style="grid-template-columns:repeat(3,1fr)">${grid.map((x,k)=>`<button class="pick" data-k="${k}" aria-label="${x[0]}">${x[1]}</button>`).join('')}</div>
+      <div class="pips" id="pips">${seq.map(()=>'<span class="pip"></span>').join('')}</div><div class="fb" id="fb" aria-live="polite"></div>`);
+    $('#again2').addEventListener('click',()=>speak(text,true));
+    if(soundOn)speak(text,false);
+    $$('.pick').forEach(b=>b.addEventListener('click',()=>{
+      const it=grid[+b.dataset.k];
+      if(it===seq[step]){step++;b.classList.add('got');$$('#pips .pip').forEach((p,j)=>p.classList.toggle('on',j<step));
+        if(step===seq.length){if(miss===0){clean++;addStar(1)}const fb=$('#fb');fb.className='fb good';fb.textContent=pick(PRAISE);
+          setTimeout(()=>{round++;if(round<lens.length)start();else{setDots(4,-1,[true,true,true,true]);complete(tile,`${clean} van 4 rondtes sonder foute.`)}},900)}}
+      else{miss++;step=0;$$('.pick').forEach(x=>x.classList.remove('got'));$$('#pips .pip').forEach(p=>p.classList.remove('on'));b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
+        const fb=$('#fb');fb.className='fb try';fb.textContent='Luister weer en begin van voor af.';if(soundOn)speak(text,false)}
+    }));
+  }
+  start();
+}
+
+/* story order */
+const SEQS=[{t:'Die saadjie groei',s:[['🌰','saadjie'],['🌱','spruitjie'],['🌿','plantjie'],['🌻','blom']]},
+ {t:'Oggend voor skool',s:[['🛏️','wakker word'],['🪥','tande borsel'],['🥣','ontbyt eet'],['🎒','skool toe']]},
+ {t:'Ons bak ’n koek',s:[['🥚','eiers breek'],['🥣','meng'],['🔥','bak'],['🎂','geniet']]},
+ {t:'Die vlinder',s:[['🥚','eiertjie'],['🐛','ruspe'],['🦋','vlinder']]}];
+function runVolgorde(tile){
+  const list=sample(SEQS,3);let si=0;
+  function show(){
+    const sq=list[si];let next=0;setDots(3,si,Array.from({length:si},()=>true));
+    const cards=shuffle(sq.s.map((x,k)=>({x,k})));
+    stageCard(`<div style="text-align:center"><span class="qtag">Storievolgorde</span></div><h2 class="qtext">${sq.t}. Tik die prentjies in die regte volgorde.</h2>
+      <div class="cards3">${cards.map((c,j)=>`<button class="pick" data-k="${c.k}" aria-label="${c.x[1]}">${c.x[0]}<span>${c.x[1]}</span></button>`).join('')}</div>
+      <div class="fb" id="fb" aria-live="polite">Wat het eerste gebeur?</div><div class="actions"><button class="btn ghost" id="lst">🔊 Luister</button></div>`);
+    $('#lst').addEventListener('click',()=>speak(`${sq.t}. Tik die prentjies in die regte volgorde. Wat het eerste gebeur?`,true));
+    if(soundOn)speak(`${sq.t}. Tik die prentjies in die regte volgorde.`,false);
+    $$('.pick').forEach(b=>b.addEventListener('click',()=>{
+      if(b.classList.contains('got'))return;const k=+b.dataset.k;
+      if(k===next){next++;b.classList.add('got');b.insertAdjacentHTML('afterbegin',`<i class="n" style="font-style:normal">${next}</i>`);
+        if(next===sq.s.length){addStar(1);const fb=$('#fb');fb.className='fb good';fb.textContent='Reg! Vertel nou die storie in jou eie woorde.';
+          $('.actions').insertAdjacentHTML('beforeend',`<button class="btn" id="nx">${si===list.length-1?'Klaar ✔':'Volgende storie ➜'}</button>`);
+          $('#nx').addEventListener('click',()=>{si++;if(si<list.length)show();else complete(tile,'Jy het al die stories in die regte volgorde gesit.')})}
+        else{const fb=$('#fb');fb.className='fb good';fb.textContent='Goed so! Wat het daarna gebeur?'}}
+      else{b.classList.remove('no');void b.offsetWidth;b.classList.add('no');const fb=$('#fb');fb.className='fb try';fb.textContent='Dink weer: wat het eerste gebeur?'}
+    }));
+  }
+  show();
+}
+
+/* tell a story (adult-led) */
+function runStorie(tile){
+  const starters=[
+    {e:'🐰 🌳 🦊 🌈',q:['Wie is die karakters en hoe lyk hulle?','Waar speel die storie af?','Wat gebeur eerste, daarna en laaste?']},
+    {e:'🐘 🐸 🌧️ 🏠',q:['Wat is die karakters se name?','Wat gebeur toe dit begin reën?','Hoe eindig die storie?']},
+    {e:'👧 🐶 🎈 🌻',q:['Beskryf die meisie en die hond.','Waarheen gaan hulle?','Wat gebeur heel aan die einde?']}];
+  const s=pick(starters);let n=0;
+  stageCard(`<div style="text-align:center"><span class="qtag">Vertel ’n storie</span></div><h2 class="qtext">Vertel ’n storie met ’n begin, middel en einde.</h2>
+    <div class="visual" style="font-size:56px">${s.e}</div>
+    <ul class="small" style="max-width:480px;margin:0 auto 6px;padding-left:1.2em">${s.q.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <p class="small" style="text-align:center">Grootmens: tik <b>+</b> vir elke volsin wat jou kind vertel. Mik vir 6 tot 10 sinne.</p>
+    <div class="counter"><button class="btn ghost" id="mn" aria-label="Een minder">−</button><div class="num" id="num" aria-live="polite">0</div><button class="btn" id="pl" aria-label="Een meer">+</button></div>
+    <div class="pips" id="pips">${Array.from({length:10},()=>'<span class="pip"></span>').join('')}</div>
+    <div class="checks"><label><input type="checkbox"> Duidelike begin</label><label><input type="checkbox"> Karakters benoem en beskryf</label><label><input type="checkbox"> Plek en besonderhede genoem</label><label><input type="checkbox"> Duidelike einde</label></div>
+    <div class="actions"><button class="btn green" id="fin" disabled>Ons is klaar ✔</button></div>`);
+  const upd=()=>{$('#num').textContent=n;$$('#pips .pip').forEach((p,j)=>p.classList.toggle('on',j<n));$('#fin').disabled=n<6};
+  $('#pl').addEventListener('click',()=>{if(n<10){n++;upd()}});$('#mn').addEventListener('click',()=>{if(n>0){n--;upd()}});
+  $('#fin').addEventListener('click',()=>{addStar(2);complete(tile,`Jy het ${n} sinne vertel.`)});
+}
+
+/* know myself (adult-led, nothing typed or stored) */
+function runMyself(tile){
+  const items=['Ek kan my naam sê','Ek kan my van sê','Ek ken my verjaarsdag (dag en maand)','Ek ken my ouer se foonnommer','Ek ken my huisadres','Ek weet of ek ’n seun of meisie is'];
+  stageCard(`<div style="text-align:center"><span class="qtag">Ek ken myself</span></div><h2 class="qtext">Oefen saam met ’n betroubare grootmens.</h2>
+    <div class="visual">🧒 🏠 📞 🎂</div>
+    <p class="small" style="text-align:center">Sê dit hardop. Niks word hier getik of gestoor nie. Grootmens: kruis af wat jou kind al ken.</p>
+    <div class="checks">${items.map((t,k)=>`<label><input type="checkbox" id="c${k}"> ${t}</label>`).join('')}</div>
+    <p class="small" style="text-align:center">Praat ook oor wie jou kan help as jy verdwaal, en met wie jy jou besonderhede mag deel.</p>
+    <div class="actions"><button class="btn green" id="fin">Ons het geoefen ✔</button></div>`);
+  $('#fin').addEventListener('click',()=>{addStar(1);complete(tile,'Mooi gedoen! Oefen elke dag ’n bietjie.')});
+}
+
+/* performing arts (no lyrics stored) */
+function runOptree(tile){
+  stageCard(`<div style="text-align:center"><span class="qtag">Uitvoerende kunste</span></div><h2 class="qtext">Voer ’n rympie, vers of liedjie op.</h2>
+    <div class="visual">🎤 🎶 👏</div>
+    <ol class="small" style="max-width:480px;margin:0 auto;padding-left:1.2em;display:grid;gap:6px">
+      <li>Kies ’n rympie, vers of liedjie wat julle in die klas geleer het.</li>
+      <li>Sê dit stadig en duidelik. Gebruik aksies en jou stem.</li>
+      <li>Staan regop, kyk na jou gehoor en voer dit op vir die gesin.</li>
+      <li>Vra jou gehoor wat hulle die beste gehou het.</li></ol>
+    <div class="actions"><button class="btn green" id="fin">Ek het opgetree ✔</button></div>`);
+  $('#fin').addEventListener('click',()=>{addStar(2);complete(tile,'Wat ’n mooi optrede!')});
+}
+
+/* writing and drawing */
+function attachInk(cv,color,size){
+  const ctx=cv.getContext('2d');ctx.lineCap='round';ctx.lineJoin='round';let down=false,last=null;
+  const pos=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}};
+  cv.addEventListener('pointerdown',e=>{down=true;try{cv.setPointerCapture(e.pointerId)}catch(x){}last=pos(e);ctx.strokeStyle=color();ctx.lineWidth=size();ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(last.x+.01,last.y);ctx.stroke();e.preventDefault()});
+  cv.addEventListener('pointermove',e=>{if(!down)return;const p=pos(e);ctx.strokeStyle=color();ctx.lineWidth=size();ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;e.preventDefault()});
+  const up=()=>{down=false};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('pointerleave',up);
+  return ctx;
+}
+function drawGuide(cv,item){
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  const base=232,top=52;ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.strokeStyle='#cfe0f5';ctx.beginPath();ctx.moveTo(0,top);ctx.lineTo(W,top);ctx.stroke();
+  ctx.strokeStyle='#f3c1c1';ctx.beginPath();ctx.moveTo(0,base);ctx.lineTo(W,base);ctx.stroke();
+  ctx.setLineDash([8,8]);ctx.strokeStyle='#cfe0f5';ctx.beginPath();ctx.moveTo(0,(top+base)/2);ctx.lineTo(W,(top+base)/2);ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#8fa0c2';ctx.lineWidth=5;ctx.lineCap='round';ctx.lineJoin='round';
+  const path=pts=>{ctx.setLineDash([2,12]);ctx.beginPath();pts.forEach((p,k)=>k?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#2f9e5f';ctx.beginPath();ctx.arc(pts[0][0],pts[0][1],9,0,7);ctx.fill()};
+  if(item.t==='pat'){
+    const pts=[];
+    if(item.k==='wave'){for(let x=30;x<=690;x+=4)pts.push([x,150+55*Math.sin((x-30)/52)])}
+    else if(item.k==='zig'){for(let k=0;k<10;k++)pts.push([30+k*70,k%2?80:220])}
+    else if(item.k==='loop'){for(let t=0;t<=20*Math.PI;t+=.12)pts.push([40+10*t-30*Math.sin(t),150-30*Math.cos(t)])}
+    else if(item.k==='slant'){for(let k=0;k<8;k++){ctx.setLineDash([2,12]);ctx.beginPath();ctx.moveTo(40+k*84,225);ctx.lineTo(80+k*84,70);ctx.stroke();ctx.setLineDash([])}ctx.fillStyle='#2f9e5f';ctx.beginPath();ctx.arc(40,225,9,0,7);ctx.fill();return}
+    else if(item.k==='circ'){for(let k=0;k<5;k++){ctx.setLineDash([2,12]);ctx.beginPath();ctx.arc(110+k*125,150,52,0,Math.PI*2);ctx.stroke();ctx.setLineDash([])}ctx.fillStyle='#2f9e5f';ctx.beginPath();ctx.arc(110,98,9,0,7);ctx.fill();return}
+    path(pts);return;
+  }
+  const txt=item.v;ctx.font='800 190px Nunito, Arial, sans-serif';ctx.textBaseline='alphabetic';ctx.textAlign='center';
+  ctx.fillStyle='#eef3ff';ctx.lineWidth=5;
+  const draw=(s,x)=>{ctx.fillText(s,x,base);ctx.setLineDash([2,10]);ctx.strokeText(s,x,base);ctx.setLineDash([])};
+  if(txt.length===1){[140,360,580].forEach(x=>draw(txt,x))}
+  else{let size=190;ctx.font=`800 ${size}px Nunito, Arial, sans-serif`;const w=ctx.measureText(txt).width;if(w>640){size=Math.floor(size*640/w);ctx.font=`800 ${size}px Nunito, Arial, sans-serif`}draw(txt,W/2)}
+}
+function runSkryf(tile){
+  const sets={Patrone:[['Golwe','wave'],['Sigsag','zig'],['Lusse','loop'],['Sirkels','circ'],['Skuins','slant']].map(x=>({l:x[0],t:'pat',k:x[1]})),
+    Syfers:['1','2','3','4','5','6','7','8','9','10'].map(x=>({l:x,v:x})),
+    Letters:'a b d e f g h i j k l m n o p r s t u v w y z'.split(' ').map(x=>({l:x,v:x})),Naam:[]};
+  let cat='Patrone',cur=sets.Patrone[0],name='Chloé',colorV='#3b82d6',marks=0;
+  stageCard(`<div style="text-align:center"><span class="qtag">Natrek en skryf</span></div><h2 class="qtext">Trek die kolletjies na. Begin by die groen kolletjie.</h2>
+    <p class="small" style="text-align:center">Werk van links na regs en van bo na onder. Hou die potlood met jou duim, wysvinger en middelvinger. Oefen ook op papier met ’n potlood.</p>
+    <div class="chipsrow" id="cats"></div><div class="chipsrow" id="items"></div>
+    <div class="field" id="nmf" hidden><label for="nm">My naam:</label><input id="nm" maxlength="14" autocomplete="off" value="${name}"><span class="small">Die naam bly net op hierdie skerm.</span></div>
+    <div class="paper" style="aspect-ratio:720/320"><canvas id="g" width="720" height="320"></canvas><canvas id="ink" width="720" height="320" aria-label="Skryfarea"></canvas></div>
+    <div class="swatches" id="sw"></div>
+    <div class="actions"><button class="btn ghost" id="clr">Vee my skryfwerk uit</button><button class="btn green" id="fin">Ek het geoefen ✔</button></div>`);
+  const g=$('#g'),ink=$('#ink');
+  const ctx=attachInk(ink,()=>colorV,()=>10);
+  ink.addEventListener('pointerup',()=>{marks++});
+  function paint(){ctx.clearRect(0,0,ink.width,ink.height);if(cat==='Naam')drawGuide(g,{v:name||'?'});else drawGuide(g,cur)}
+  function chips(){
+    $('#cats').innerHTML=Object.keys(sets).map(k=>`<button aria-pressed="${k===cat}" data-c="${k}">${k}</button>`).join('');
+    $('#items').innerHTML=cat==='Naam'?'':sets[cat].map((x,j)=>`<button aria-pressed="${x===cur}" data-j="${j}">${x.l}</button>`).join('');
+    $('#nmf').hidden=cat!=='Naam';
+    $$('#cats button').forEach(b=>b.addEventListener('click',()=>{cat=b.dataset.c;if(cat!=='Naam')cur=sets[cat][0];chips();paint()}));
+    $$('#items button').forEach(b=>b.addEventListener('click',()=>{cur=sets[cat][+b.dataset.j];chips();paint()}));
+  }
+  $('#nm').addEventListener('input',e=>{name=e.target.value.replace(/[<>&"]/g,'');paint()});
+  $('#sw').innerHTML=['#3b82d6','#e8543a','#2f9e5f','#8a5cc7','#1f2f4d'].map((c,k)=>`<button class="sw" style="background:${c}" aria-label="Kleur ${k+1}" aria-pressed="${c===colorV}" data-c="${c}"></button>`).join('');
+  $$('#sw .sw').forEach(b=>b.addEventListener('click',()=>{colorV=b.dataset.c;$$('#sw .sw').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));
+  $('#clr').addEventListener('click',()=>ctx.clearRect(0,0,ink.width,ink.height));
+  $('#fin').addEventListener('click',()=>{addStar(2);complete(tile,'Mooi skryfwerk!')});
+  chips();paint();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(paint).catch(()=>{});
+}
+function runTeken(tile){
+  const prompts=['Teken ’n mens met ’n gesig, arms, bene en klere. Gebruik die hele bladsy.','Teken jouself in die tuin. Wat is voor en wat is agter jou?','Teken jou gesin by die huis met ’n lug en ’n grond.','Teken jou gunsteling dier in sy huis met baie besonderhede.'];
+  let colorV='#e8543a',size=8;
+  stageCard(`<div style="text-align:center"><span class="qtag">Skeppende kuns</span></div><h2 class="qtext" id="pr">${pick(prompts)}</h2>
+    <div class="paper" style="aspect-ratio:720/480"><canvas id="cv" width="720" height="480" aria-label="Tekenarea"></canvas></div>
+    <div class="swatches" id="sw"></div>
+    <div class="chipsrow" id="sz"><button data-s="5" aria-pressed="false">Dun</button><button data-s="8" aria-pressed="true">Middel</button><button data-s="16" aria-pressed="false">Dik</button></div>
+    <div class="actions"><button class="btn ghost" id="np">Nuwe idee</button><button class="btn ghost" id="clr">Begin oor</button><button class="btn green" id="fin">Ek is klaar ✔</button></div>`);
+  const cv=$('#cv');const ctx=attachInk(cv,()=>colorV,()=>size);const wipe=()=>{ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height)};wipe();
+  const cols=['#e8543a','#f08a3c','#ffc533','#2f9e5f','#3b82d6','#8a5cc7','#8b5a2b','#1f2f4d','#ffffff'];
+  $('#sw').innerHTML=cols.map((c,k)=>`<button class="sw" style="background:${c}" aria-label="${c==='#ffffff'?'Uitveër':'Kleur '+(k+1)}" aria-pressed="${c===colorV}" data-c="${c}"></button>`).join('');
+  $$('#sw .sw').forEach(b=>b.addEventListener('click',()=>{colorV=b.dataset.c;$$('#sw .sw').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));
+  $$('#sz button').forEach(b=>b.addEventListener('click',()=>{size=+b.dataset.s;$$('#sz button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));
+  $('#clr').addEventListener('click',wipe);$('#np').addEventListener('click',()=>{$('#pr').textContent=pick(prompts)});
+  $('#fin').addEventListener('click',()=>{addStar(2);complete(tile,'Wat ’n mooi kunswerk!')});
+}
+
+/* physical education cards (adult supervises) */
+const MOVES=[
+ ['🦶','Balanseer op jou tone','Staan op jou tone en kyk reguit voor. Tel stadig tot 10.',10],
+ ['👣','Balanseer op jou hakke','Staan op jou hakke met jou tone in die lug. Tel stadig tot 10.',10],
+ ['🧍','Staan op een been','Staan op een been. Probeer dit met oë oop, dan met oë toe, dan met arms gekruis. Moet nie forseer nie.',10],
+ ['↩️','Loop agteruit','Loop agteruit op ’n reguit lyn. Maak eers seker die pad is vry.',0],
+ ['🦘','Spring oor voorwerpe','Spring oor ’n sagte, lae voorwerp, soos ’n opgerolde handdoek.',0],
+ ['⭐','Ster-spronge','Doen 10 ster-spronge. Maak jou arms en bene wyd oop.',0],
+ ['🐴','Galop','Galop soos ’n perd deur die tuin of kamer.',0],
+ ['🐇','Huppel en draai','Huppel vorentoe. Verander van rigting as die grootmens ’n teken gee.',0],
+ ['🪢','Tou spring','Spring tou so lank as wat jy kan. Tel jou spronge.',0],
+ ['🤸','Bollemakiesies','Maak 2 bollemakiesies agter mekaar, net op ’n sagte mat en met ’n grootmens langsaan.',0],
+ ['💪','Opstote','Doen 10 opstote sonder om te stop. Pas dit aan by wat jy kan doen.',0],
+ ['🧺','Vang en gooi','Gooi en vang ’n boontjiesakkie en ’n bal. Begin met kort afstande.',0],
+ ['🏀','Bons en vang','Bons die bal en vang dit weer. Hoeveel keer sonder om dit te mis?',0],
+ ['🏑','Kolf of dribbel','Dribbel ’n bal met jou voete of kolf ’n sagte bal met ’n kolf.',0]];
+function runBeweeg(tile){
+  const deck=shuffle(MOVES);let i=0,did=new Set(),tm=null;
+  onLeave(()=>{if(tm)clearInterval(tm)});
+  function show(){
+    if(tm){clearInterval(tm);tm=null}
+    const m=deck[i];
+    stageCard(`<div class="move"><span class="qtag">Kaart ${i+1} van ${deck.length}</span><div class="ic" aria-hidden="true">${m[0]}</div><h2>${m[1]}</h2><p>${m[2]}</p>
+      ${m[3]?`<div class="clock" id="clk" aria-live="polite">${m[3]}</div><button class="btn ghost" id="go">⏱ Begin tel</button>`:''}
+      <div class="actions"><button class="btn ghost" id="pv" ${i?'':'disabled'}>⬅ Vorige</button><button class="btn green" id="dn">${did.has(i)?'Gedoen ✔':'Ons het dit gedoen'}</button><button class="btn" id="nx">Volgende ➜</button></div>
+      <p class="small">Grootmens: kyk toe op ’n veilige, nie-gladde plek. Pas elke taak aan by jou kind se vermoë. Jou kind kies self wat hy of sy wil probeer.</p>
+      <div class="pips">${deck.map((_,k)=>`<span class="pip ${did.has(k)?'on':''}"></span>`).join('')}</div></div>`);
+    if(m[3])$('#go').addEventListener('click',()=>{if(tm)clearInterval(tm);let t=m[3];$('#clk').textContent=t;tm=setInterval(()=>{t--;$('#clk').textContent=t>0?t:'🎉';if(t<=0){clearInterval(tm);tm=null}},1000)});
+    $('#pv').addEventListener('click',()=>{if(i>0){i--;show()}});
+    $('#nx').addEventListener('click',()=>{if(i<deck.length-1){i++;show()}else if(did.size>=5){complete(tile,`Jy het ${did.size} bewegings gedoen!`)}else{i=0;show()}});
+    $('#dn').addEventListener('click',()=>{if(!did.has(i)){did.add(i);addStar(1)}
+      if(did.size>=5&&!$('#fin')){$('.actions').insertAdjacentHTML('beforeend','<button class="btn green" id="fin">Klaar vir nou ✔</button>');$('#fin').addEventListener('click',()=>complete(tile,`Jy het ${did.size} bewegings gedoen!`))}
+      $$('.pip').forEach((p,k)=>p.classList.toggle('on',did.has(k)));$('#dn').textContent='Gedoen ✔'});
+    if(did.size>=5){$('.actions').insertAdjacentHTML('beforeend','<button class="btn green" id="fin">Klaar vir nou ✔</button>');$('#fin').addEventListener('click',()=>complete(tile,`Jy het ${did.size} bewegings gedoen!`))}
+  }
+  show();
+}
+
+/* ---------- tile list ---------- */
+const TILES=[
+ {id:'klanke',g:'Afrikaans',n:'Klanke',s:'Beginklanke en klanke saamvoeg',ic:'🔤',st:'🐸',run:t=>runQuiz(t),gen:genKlanke},
+ {id:'rym',g:'Afrikaans',n:'Rym en lettergrepe',s:'Rymwoorde en klap-klap',ic:'🎵',st:'🦜',run:t=>runQuiz(t),gen:genRym},
+ {id:'lees',g:'Afrikaans',n:'Lees woordjies',s:'Woord en prentjie',ic:'📖',st:'🦉',run:t=>runQuiz(t),gen:genLees},
+ {id:'luister',g:'Afrikaans',n:'Luister en doen',s:'2 tot 5 opdragte onthou',ic:'👂',st:'🐰',run:runLuister},
+ {id:'volgorde',g:'Afrikaans',n:'Storievolgorde',s:'Sit prentjies in volgorde',ic:'🖼️',st:'🐢',run:runVolgorde},
+ {id:'storie',g:'Afrikaans',n:'Vertel ’n storie',s:'6 tot 10 sinne, saam met ’n grootmens',ic:'🗣️',st:'🦁',run:runStorie},
+ {id:'tel',g:'Wiskunde',n:'Tel en getalle',s:'Tot 20, getalname, in 2’s en 10’s',ic:'🔢',st:'🐘',run:t=>runQuiz(t),gen:genTel},
+ {id:'somme',g:'Wiskunde',n:'Plus en min',s:'Somme tot 10',ic:'➕',st:'🐼',run:t=>runQuiz(t),gen:genSomme},
+ {id:'meer',g:'Wiskunde',n:'Meer, minder, eerste',s:'Vergelyk en ordinale getalle',ic:'⚖️',st:'🐧',run:t=>runQuiz(t),gen:genMeer},
+ {id:'patrone',g:'Wiskunde',n:'Patrone',s:'Gaan voort met die patroon',ic:'🔴',st:'🦋',run:t=>runQuiz(t),gen:genPatrone},
+ {id:'meting',g:'Wiskunde',n:'Meet en vergelyk',s:'Lank, kort, blokkies, liniaal',ic:'📏',st:'🦒',run:t=>runQuiz(t),gen:genMeting},
+ {id:'geld',g:'Wiskunde',n:'Geld',s:'Muntstukke en note, 5c tot R200',ic:'🪙',st:'🦔',run:t=>runQuiz(t),gen:genGeld},
+ {id:'vorm',g:'Wiskunde',n:'Vorms',s:'2D- en 3D-vorms',ic:'🔷',st:'🐙',run:t=>runQuiz(t),gen:genVorm},
+ {id:'ruimte',g:'Wiskunde',n:'Links, regs, simmetrie',s:'Ruimte en vorm',ic:'↔️',st:'🦓',run:t=>runQuiz(t),gen:genRuimte},
+ {id:'data',g:'Wiskunde',n:'Sorteer en piktogram',s:'Sorteer en lees ’n piktogram',ic:'📊',st:'🐝',run:t=>runQuiz(t),gen:genData},
+ {id:'tyd',g:'Lewensvaardigheid',n:'Dae, maande, seisoene',s:'Vandag, gister en môre',ic:'📅',st:'🐞',run:t=>runQuiz(t),gen:genTyd},
+ {id:'weer',g:'Lewensvaardigheid',n:'Weer en gevoelens',s:'Wat sien en voel jy?',ic:'🌦️',st:'🦆',run:t=>runQuiz(t),gen:genWeer},
+ {id:'verskille',g:'Lewensvaardigheid',n:'Vind die verskille',s:'8 verskille en ooreenkomste',ic:'🔍',st:'🦊',run:runVerskille},
+ {id:'myself',g:'Lewensvaardigheid',n:'Ek ken myself',s:'Naam, verjaarsdag en meer',ic:'🧒',st:'🐿️',run:runMyself},
+ {id:'skryf',g:'Kuns en skryf',n:'Natrek en skryf',s:'Patrone, syfers, letters en jou naam',ic:'✏️',st:'🐨',run:runSkryf},
+ {id:'teken',g:'Kuns en skryf',n:'Teken',s:'’n Prent met voor en agter',ic:'🎨',st:'🦄',run:runTeken},
+ {id:'optree',g:'Kuns en skryf',n:'Rympies en liedjies',s:'Voer iets op vir die gesin',ic:'🎤',st:'🐓',run:runOptree},
+ {id:'beweeg',g:'Liggaamlike opvoeding',n:'Beweeg en speel',s:'Balans, spring, gooi en vang',ic:'🤸',st:'🐆',run:runBeweeg}
+];
+const GCOL={'Afrikaans':'--g-taal','Wiskunde':'--g-wisk','Lewensvaardigheid':'--g-lewe','Kuns en skryf':'--g-kuns','Liggaamlike opvoeding':'--g-lyf'};
+const MIX={id:'gemeng',st:'🏆',n:'Gemengde uitdaging',run:t=>runQuiz(t,mixGen)};
+
+function renderHome(){
+  const groups=[];TILES.forEach(t=>{let g=groups.find(x=>x.n===t.g);if(!g){g={n:t.g,t:[]};groups.push(g)}g.t.push(t)});
+  $('#groups').innerHTML=groups.map(g=>`<section class="group"><h2>${g.n} <small>${g.t.filter(t=>state.done[t.id]).length} van ${g.t.length} klaar</small></h2><div class="tiles">${g.t.map(t=>`<button class="tile" data-id="${t.id}" style="--tc:var(${GCOL[g.n]})"><span class="ic" aria-hidden="true">${t.ic}</span><b>${t.n}</b><small>${t.s}</small>${state.done[t.id]?`<span class="stk" aria-label="Sticker verdien">${t.st}</span>`:''}</button>`).join('')}</div></section>`).join('');
+  $$('#groups .tile').forEach(b=>b.addEventListener('click',()=>openTile(TILES.find(t=>t.id===b.dataset.id))));
+  const n=TILES.filter(t=>state.done[t.id]).length;$('#progress').textContent=`${n} van ${TILES.length} aktiwiteite klaar`;
+  $('#stars').textContent=state.stars;
+}
+function showHome(){leave();$('#play').hidden=true;$('#home').hidden=false;renderHome();window.scrollTo(0,0)}
+function openTile(t){leave();$('#home').hidden=true;$('#play').hidden=false;$('#ptitle').textContent=t.n;$('#dots').innerHTML='';window.scrollTo(0,0);t.run(t)}
+function mixGen(){const quiz=TILES.filter(t=>t.gen);const out=[];quiz.forEach(t=>{const q=t.gen();out.push(q[0])});return shuffle(out).slice(0,12)}
+$('#back').addEventListener('click',showHome);
+$('#mix').addEventListener('click',()=>openTile(MIX));
+renderHome();
+})();
+</script>
+
+</body></html>
