@@ -16,6 +16,13 @@ Voice: Microsoft Edge TTS, af-ZA-AdriNeural (natural female). Free, no key:
 Each line's filename is the cyrb53 hash of its exact text (must match the
 cyrb53() function in index.html). Output: audio/af/<hash>.mp3 (32kbps mono
 if ffmpeg is available, else raw) + audio/lines.json + audio/manifest.json.
+
+audio/say_as.json (optional): {game_text: ssml_or_text} overrides ONLY what
+is sent to the TTS engine. Filenames/hashes still come from the game text,
+so the game, enumerate.js and fallbacks stay untouched. Use it when spelling
+can't produce the right sound, e.g. the English name "Chloé" (KLOH-ee) via
+<phoneme alphabet="ipa" ph="...">. After adding an override, delete the old
+mp3(s) so they regenerate (gen skips existing files).
 """
 import argparse
 import asyncio
@@ -29,6 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 AUDIO = ROOT / "audio"
 AFDIR = AUDIO / "af"
+SAY_AS_FILE = AUDIO / "say_as.json"
 VOICE = "af-ZA-AdriNeural"
 PARALLEL = 4
 RETRIES = 3
@@ -63,7 +71,7 @@ def collect() -> dict:
     return lines
 
 
-async def gen_one(sem, h, text) -> str:
+async def gen_one(sem, h, text, send) -> str:
     import edge_tts
 
     out = AFDIR / f"{h}.mp3"
@@ -72,7 +80,7 @@ async def gen_one(sem, h, text) -> str:
     async with sem:
         for attempt in range(RETRIES):
             try:
-                await asyncio.wait_for(edge_tts.Communicate(text, VOICE).save(str(out)), timeout=60)
+                await asyncio.wait_for(edge_tts.Communicate(send, VOICE).save(str(out)), timeout=60)
                 break
             except Exception as e:
                 if attempt == RETRIES - 1:
@@ -100,13 +108,16 @@ def shrink(out: Path):
 
 async def generate(lines: dict, only: set | None):
     AFDIR.mkdir(parents=True, exist_ok=True)
+    say_as = json.loads(SAY_AS_FILE.read_text(encoding="utf-8")) if SAY_AS_FILE.exists() else {}
+    if say_as:
+        print(f"say-as overrides: {len(say_as)} lines (game text unchanged, TTS input adjusted)")
     sem = asyncio.Semaphore(PARALLEL)
-    items = [(h, t) for h, t in lines.items() if (not only or h in only)]
+    items = [(h, t, say_as.get(t, t)) for h, t in lines.items() if (not only or h in only)]
     print(f"generating {len(items)} lines ({PARALLEL} parallel)...")
-    results = await asyncio.gather(*(gen_one(sem, h, t) for h, t in items))
+    results = await asyncio.gather(*(gen_one(sem, h, t, s) for h, t, s in items))
     ok = sum(1 for r in results if r == "ok")
     skip = sum(1 for r in results if r == "skip")
-    fails = [(h, r) for (h, _), r in zip(items, results) if r not in ("ok", "skip")]
+    fails = [(h, r) for (h, _, _), r in zip(items, results) if r not in ("ok", "skip")]
     print(f"done: {ok} new, {skip} already had, {len(fails)} failed")
     for h, r in fails[:10]:
         print(f"  {h}: {r}")

@@ -1,0 +1,9 @@
+{
+ "Mooi so, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Mooi so, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>",
+ "Fantasties, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Fantasties, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>",
+ "Jy is slim, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Jy is slim, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>",
+ "Pragtig, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Pragtig, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>",
+ "Wonderlik, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Wonderlik, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>",
+ "Baie goed, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Baie goed, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>",
+ "Jy het jou beste probeer, Chloé!": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"af-ZA\"><voice name=\"af-ZA-AdriNeural\">Jy het jou beste probeer, <phoneme alphabet=\"ipa\" ph=\"ˈkloʊi\">Chloé</phoneme>!</voice></speak>"
+}
