@@ -9,6 +9,16 @@ Bron: [`Assesseringsplan 4de kw.pdf`](Assesseringsplan%204de%20kw.pdf) – die s
 amptelike Kwartaal 4-assesseringsplan. Die tabel onder wys watter speletjie-aktiwiteit
 elke assesseringsitem oefen (25 aktiwiteite + gemengde uitdaging).
 
+## 📱 Android-app (AFK, werk sonder internet)
+
+Laai die app af op ’n tablet of foon – al 756 Afrikaanse stemme is ingebou,
+so geen internet is nodig om te speel nie.
+
+**[⬇️ Laai graadrk4-v1.0.apk af (24 MB)](https://github.com/Nageljakes/graadrk4/releases/download/v1.0/graadrk4-v1.0.apk)**
+
+Installeer: maak die afgelaaide lêer oop en tik **Installeer** (laat
+“Installeer van onbekende bronne” toe as die foon daarvoor vra).
+
 ## Dekking per die assesseringsplan
 
 ### Tale – Luister en praat
