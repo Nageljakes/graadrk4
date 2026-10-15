@@ -304,13 +304,18 @@ s:[['son','☀️'],['skoen','👟'],['slang','🐍'],['ster','⭐'],['sleutel',
 u:[['uil','🦉'],['ui','🧅']],v:[['vis','🐟'],['vlinder','🦋'],['vark','🐷'],['vuur','🔥'],['voël','🐦']],w:[['wolk','☁️'],['wortel','🥕'],['walvis','🐳']],
 y:[['ys','🧊']],z:[['zebra','🦓']]};
 const L=Object.keys(W);
+/* Spoken form of each letter's SOUND (not its name) for klank-questions.
+   Stops take a helper vowel (buh, duh, ...), continuants are stretched
+   (fff, mmm, ...). a/e/o/y sound like their names already. v is fff in
+   Afrikaans (stemloos), w is voiced (wuh). Basis: Afrikaanse alfabetklanke. */
+const SND={a:'ah',b:'buh',d:'duh',e:'eh',f:'fff',g:'guh',h:'huh',i:'ih',j:'juh',k:'kuh',l:'lll',m:'mmm',n:'nnn',o:'oh',p:'puh',r:'rrr',s:'sss',t:'tuh',u:'uh',v:'fff',w:'wuh',y:'ay',z:'zzz'};
 function qSndPic(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter(x=>x!==l),2).map(x=>pick(W[x]));
-  return mk('Beginklank',`Watter prentjie begin met die letter “${l}”?`,`<div class="letter">${l}</div>`,pic(w[1],w[0]),o.map(x=>pic(x[1],x[0])),`“${w[0]}” begin met ${l}. Sê die woord stadig.`,`Watter prentjie begin met die letter ${l}?`)}
+  return mk('Beginklank',`Watter prentjie begin met die klank “${l}”?`,`<div class="letter">${l}</div>`,pic(w[1],w[0]),o.map(x=>pic(x[1],x[0])),`“${w[0]}” begin met ${l}. Sê die woord stadig.`,`Watter prentjie begin met die klank ${SND[l]}?`)}
 function qSndLetter(){const l=pick(L);const w=pick(W[l]);const o=sample(L.filter(x=>x!==l),2);
   return mk('Beginklank','Met watter klank begin hierdie woord?',`<div class="bigpic">${w[1]}<span>${w[0]}</span></div>`,big(l),o.map(big),`“${w[0]}” begin met ${l}.`,`Met watter klank begin die woord ${w[0]}?`)}
 const BL=[['vis','🐟','v – i – s'],['bal','⚽','b – a – l'],['kat','🐱','k – a – t'],['son','☀️','s – o – n'],['rok','👗','r – o – k'],['bed','🛏️','b – e – d'],['pot','🍲','p – o – t'],['lig','💡','l – i – g']];
 function qBlend(){const w=pick(BL);const o=sample(BL.filter(x=>x!==w),2);
-  return mk('Klanke saamvoeg',`Trek die klanke saam: ${w[2]}. Watter prentjie is dit?`,`<div class="seq">${w[2]}</div>`,pic(w[1],''),o.map(x=>pic(x[1],'')),`${w[2]} sê ons saam as “${w[0]}”.`,`Trek die klanke saam. ${w[2].replace(/ – /g,', ')}. Watter prentjie is dit?`)}
+  return mk('Klanke saamvoeg',`Trek die klanke saam: ${w[2]}. Watter prentjie is dit?`,`<div class="seq">${w[2]}</div>`,pic(w[1],''),o.map(x=>pic(x[1],'')),`${w[2]} sê ons saam as “${w[0]}”.`,`Trek die klanke saam. ${w[2].split(' – ').map(ch=>SND[ch]).join(', ')}. Watter prentjie is dit?`)}
 const RH=[['vis','🐟','mis','🌫️'],['muis','🐭','huis','🏠'],['hond','🐶','mond','👄'],['tand','🦷','hand','🖐️','strand','🏖️'],['hoed','🎩','bloed','🩸'],['deur','🚪','kleur','🎨'],['pak','📦','sak','👜'],['kat','🐱','rak','🗄️'],['rok','👗','pot','🍲']]
   .map(g=>{const r=[];for(let i=0;i<g.length;i+=2)r.push([g[i],g[i+1]]);return r});
 function qRhyme(){const gi=rnd(0,RH.length-1),g=RH[gi];const t=pick(g);const good=pick(g.filter(x=>x!==t));

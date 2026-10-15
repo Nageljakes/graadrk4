@@ -18,9 +18,9 @@ const sandbox = {
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 vm.runInContext(`Math.random=(()=>{let s=987654321;return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}})();`, sandbox);
-const inner = js.replace(/\}\)\(\);\s*$/, ';globalThis.G={TILES,SEQS,W,RH,SY,BL,HFW,ORD,NAME,FR,DAYS,MONTHS,SEAS,QNAMES,n2,n3,ck,nk,COL,PL};})();');
+const inner = js.replace(/\}\)\(\);\s*$/, ';globalThis.G={TILES,SEQS,W,RH,SY,BL,HFW,ORD,NAME,FR,DAYS,MONTHS,SEAS,QNAMES,n2,n3,ck,nk,COL,PL,SND};})();');
 vm.runInContext(inner, sandbox);
-const { TILES, SEQS, W, RH, SY, BL, HFW, ORD, NAME, FR, DAYS, MONTHS, SEAS, QNAMES, n2, n3, ck, nk, COL, PL } = sandbox.G;
+const { TILES, SEQS, W, RH, SY, BL, HFW, ORD, NAME, FR, DAYS, MONTHS, SEAS, QNAMES, n2, n3, ck, nk, COL, PL, SND } = sandbox.G;
 
 const found = new Map();
 const add = s => found.set(s, (found.get(s) || 0) + 1);
@@ -76,8 +76,8 @@ for (const o of ORD) add(`Wie is die ${o} in die ry?`); // qOrdinal
 add(`Tel in 2's. Wat kom volgende?`); add(`Tel in 10's. Wat kom volgende?`); // qSkip
 for (const g of RH) for (const w of g) add(`Watter woord rym met “${w[0]}”?`); // qRhyme
 for (const w of SY) add(`Klap die woord. Hoeveel lettergrepe het “${w[0]}”?`); // qSyll
-for (const w of BL) add(`Trek die klanke saam: ${w[2]}. Watter prentjie is dit?`); // qBlend
-for (const l of L) add(`Watter prentjie begin met die letter ${l}?`); // qSndPic (spoken, no quotes)
+for (const w of BL) add(`Trek die klanke saam. ${w[2].split(' – ').map(ch => SND[ch]).join(', ')}. Watter prentjie is dit?`); // qBlend (spoken: sounds)
+for (const l of L) add(`Watter prentjie begin met die klank ${SND[l]}?`); // qSndPic (spoken: sound, no quotes)
 for (const l of L) for (const w of W[l]) add(`Met watter klank begin die woord ${w[0]}?`); // qSndLetter
 for (const w of HFW) add(`Lees die woord. Tik dieselfde woord: “${w}”.`); // qHFW
 for (const k of ck) add(`Watter muntstuk is ${k.replace('R', 'R ')}?`); // qFindCoin (spoken)
