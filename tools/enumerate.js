@@ -18,9 +18,9 @@ const sandbox = {
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 vm.runInContext(`Math.random=(()=>{let s=987654321;return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}})();`, sandbox);
-const inner = js.replace(/\}\)\(\);\s*$/, ';globalThis.G={TILES,SEQS,W,RH,SY,BL,HFW,ORD,NAME,FR,DAYS,MONTHS,SEAS,QNAMES,n2,n3,ck,nk,COL,PL,SND,PRAISE_SAID,DONE_SAID};})();');
+const inner = js.replace(/\}\)\(\);\s*$/, ';globalThis.G={TILES,SEQS,W,RH,SY,BL,HFW,ORD,NAME,FR,DAYS,MONTHS,SEAS,QNAMES,n2,n3,ck,nk,COL,PL,SND,PRAISE,DONE_SAID};})();');
 vm.runInContext(inner, sandbox);
-const { TILES, SEQS, W, RH, SY, BL, HFW, ORD, NAME, FR, DAYS, MONTHS, SEAS, QNAMES, n2, n3, ck, nk, COL, PL, SND, PRAISE_SAID, DONE_SAID } = sandbox.G;
+const { TILES, SEQS, W, RH, SY, BL, HFW, ORD, NAME, FR, DAYS, MONTHS, SEAS, QNAMES, n2, n3, ck, nk, COL, PL, SND, PRAISE, DONE_SAID } = sandbox.G;
 
 const found = new Map();
 const add = s => found.set(s, (found.get(s) || 0) + 1);
@@ -104,7 +104,7 @@ for (const t of [`Ons gebruik ’n sambreel. Watter weer is dit?`,`Ons smeer son
 add(`Waar begin ons lees op ’n bladsy?`); add(`Hoe blaai ons deur ’n boek?`); // qBook
 add(`Kyk na die ry. Watter een is heel links?`); add(`Kyk na die ry. Watter een is heel regs?`); // qLeftRight
 add(`Watter pyl wys na links?`); add(`Watter pyl wys na regs?`); // qArrow
-for (const p of PRAISE_SAID) add(p); // spoken praise (personalised)
+for (const p of PRAISE) add(p); // spoken praise
 add(DONE_SAID); // spoken on activity complete
 add(`Steek jou regterhand op. Watter hand is dit?`); add(`Steek jou linkerhand op. Watter hand is dit?`); // qHand
 

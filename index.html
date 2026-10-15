@@ -492,10 +492,9 @@ const genWeer=()=>shuffle([].concat(uniq(qWeather,3),uniq(qUmbrella,2),uniq(qFee
 
 /* ---------- quiz runner ---------- */
 const PRAISE=['Mooi so!','Fantasties!','Jy is slim!','Pragtig!','Wonderlik!','Baie goed!'];
-/* Spoken praise, personalised: what you read is what Adri says. */
-const PRAISE_SAID=PRAISE.map(p=>p.slice(0,-1)+', Chloé!');
-const DONE_SAID='Jy het jou beste probeer, Chloé!';
-function playPraise(t){if(!soundOn)return;try{t=t||pick(PRAISE_SAID);const h=cyrb53(t).toString(16);if(AFSET&&AFSET.has(h))afPlay([h])}catch(e){}}
+/* Spoken praise: plain Afrikaans clips, no names. */
+const DONE_SAID='Jy het jou beste probeer!';
+function playPraise(t){if(!soundOn)return;try{t=t||pick(PRAISE);const h=cyrb53(t).toString(16);if(AFSET&&AFSET.has(h))afPlay([h])}catch(e){}}
 function setDots(n,i,res){$('#dots').innerHTML=Array.from({length:n},(_,k)=>`<span class="dot ${res[k]?'ok':k===i?'now':''}"></span>`).join('')}
 function runQuiz(tile,genOverride){
   const qs=(genOverride||tile.gen)();let i=0,firstTry=0;const res=[];
