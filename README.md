@@ -3,6 +3,15 @@
 ‘n Enkel-lêer Afrikaanse speletjie vir Graad R Kwartaal 4 assessering (Laerskool Tuine oorsig).
 Maak net `index.html` oop in ‘n blaaier – geen bou-stap, geen internet nodig nie (behalwe Google Fonts).
 Werk op tablet én skootrekenaar, met Afrikaanse voorlees-stem waar die toestel dit het.
+Speel aanlyn: https://nageljakes.github.io/graadrk4/
+
+## Afrikaanse stem 🎙️
+
+Die meeste toestelle het geen Afrikaanse stem nie – daarom het die speletjie
+vooraf-opgeneemde Afrikaanse klank (`audio/af/`, natuurlike vrouestem).
+Die 🎙️-kenteken bo wys `Afrikaanse stem ✓` wanneer dit aktief is,
+anders `Toestelstem` of `Lees saam`. Sien `audio/README.md` om dit
+weer te genereer (`python3 tools/make_voice.py`).
 
 ## Wat word gedek (24 aktiwiteite)
 

@@ -168,6 +168,7 @@ svg.it{width:42px;height:42px}
     <div class="brand"><div class="logo" aria-hidden="true">🐸</div><div><h1>Chloé se Graad R Avontuur</h1><p>Kwartaal 4 oefening</p></div></div>
     <div class="chips">
       <button class="chip" id="snd" aria-pressed="true" title="Stemlees aan of af">🔊 <span id="sndt">Stem aan</span></button>
+      <div class="chip" id="voicechip" title="Watter stem lees voor">🎙️ <span id="voicetag">…</span></div>
       <div class="chip" id="starchip" aria-live="polite">⭐ <span id="stars">0</span></div>
     </div>
   </header>
@@ -231,18 +232,53 @@ function addStar(n){state.stars+=n;save();const el=$('#stars');el.textContent=st
 /* ---------- speech ---------- */
 let voices=[],soundOn=true,warned=false;
 function loadVoices(){try{voices=window.speechSynthesis.getVoices()||[]}catch(e){voices=[]}}
-if('speechSynthesis' in window){loadVoices();try{window.speechSynthesis.onvoiceschanged=loadVoices}catch(e){}}
+if('speechSynthesis' in window){loadVoices();try{window.speechSynthesis.onvoiceschanged=()=>{loadVoices();voiceTag()}}catch(e){}}
 const afVoice=()=>voices.find(v=>/^af/i.test(v.lang));
+/* Pre-generated Afrikaans voice: audio/af/<cyrb53(text)>.mp3, see tools/make_voice.py.
+   speak() plays the MP3 when it exists, otherwise the device voice. */
+const cyrb53=(str,seed=0)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return 4294967296*(2097151&h2)+(h1>>>0)};
+let AFSET=null,afAudio=null,afToken=0;
+try{fetch('audio/manifest.json').then(r=>r.ok?r.json():null).then(m=>{if(m&&m.af&&m.af.length){AFSET=new Set(m.af);voiceTag()}}).catch(()=>{})}catch(e){}
+function afHave(ids){return AFSET&&ids.every(h=>AFSET.has(h))}
+function afPlay(ids){
+  const my=++afToken;stopNative();let k=0;
+  const step=()=>{
+    if(my!==afToken)return;
+    if(k>=ids.length)return;
+    try{
+      if(!afAudio)afAudio=new Audio();
+      afAudio.src='audio/af/'+ids[k]+'.mp3';
+      afAudio.onended=()=>{k++;step()};
+      afAudio.onerror=()=>{};
+      const p=afAudio.play();if(p&&p.catch)p.catch(()=>{});
+    }catch(e){}
+  };
+  step();
+}
+function stopNative(){try{window.speechSynthesis&&window.speechSynthesis.cancel()}catch(e){}}
+function stopMP3(){afToken++;try{if(afAudio)afAudio.pause()}catch(e){}}
 function speak(t,manual){
+  const h=cyrb53(t).toString(16);
+  if(AFSET&&AFSET.has(h)){afPlay([h]);return true}
   if(!('speechSynthesis' in window))return false;
   const v=afVoice();
   if(!v){if(manual&&!warned){warned=true;toast('Hierdie toestel het geen Afrikaanse stem nie. Lees die vraag saam met jou kind.')}return false}
+  stopMP3();
   try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=v;u.lang=v.lang;u.rate=.85;window.speechSynthesis.speak(u)}catch(e){return false}
   return true;
 }
-function stopSpeech(){try{window.speechSynthesis&&window.speechSynthesis.cancel()}catch(e){}}
+/* Luister-en-doen is combinatorial, so the game plays atomic parts in
+   sequence ("Tik", "die ster", "dan", ...) instead of one clip. */
+function speakSeq(parts,fallback,manual){
+  const ids=parts.map(t=>cyrb53(t).toString(16));
+  if(afHave(ids)){afPlay(ids);return true}
+  return speak(fallback,manual);
+}
+function stopSpeech(){stopMP3();stopNative()}
+function voiceTag(){const el=$('#voicetag');if(!el)return;el.textContent=AFSET?'Afrikaanse stem ✓':(afVoice()?'Toestelstem':'Lees saam');}
 function toast(msg){const s=$('#stage');if(!s)return;let t=$('.toast',s);if(!t){t=document.createElement('div');t.className='note toast';s.appendChild(t)}t.textContent=msg}
 $('#snd').addEventListener('click',()=>{soundOn=!soundOn;$('#snd').setAttribute('aria-pressed',String(soundOn));$('#sndt').textContent=soundOn?'Stem aan':'Stem af';if(!soundOn)stopSpeech()});
+voiceTag();
 
 let cleanups=[];
 const onLeave=f=>cleanups.push(f);
@@ -318,7 +354,8 @@ function qSkip(step){const k=step===10?rnd(5,9):rnd(3,4);const seq=Array.from({l
 const genTel=()=>shuffle([].concat(uniq(qCount,3),[qCount20()],uniq(qDigName,2),[qNameDig(),qAfterBefore(),qBack(),qSkip(2),qSkip(10)]));
 const qAdd=()=>{const a=rnd(1,6),b=rnd(1,Math.min(5,10-a)),e=pick(OBJ),c=a+b;return numQ('Optel',`Hoeveel is ${a} plus ${b}?`,`<div class="eq">${objs(a,e)}<b>+</b>${objs(b,e)}</div>`,c,1,10,`${a} plus ${b} is ${c}. Tel aan vanaf ${a}.`)};
 const qSub=()=>{const a=rnd(3,10),b=rnd(1,a-1),e=pick(OBJ),c=a-b;return numQ('Aftrek',`Hoeveel is ${a} min ${b}?`,objs(a,e,b,5),c,0,10,`${a} min ${b} is ${c}. Die verbleikte prentjies gaan weg.`)};
-const qWord=()=>{const nm=pick(['Mia','Pieter','Anke','Ruan','Liza']);
+const QNAMES=['Mia','Pieter','Anke','Ruan','Liza'];
+const qWord=()=>{const nm=pick(QNAMES);
   if(Math.random()<.5){const a=rnd(1,6),b=rnd(1,Math.min(4,10-a));return numQ('Probleem',`${nm} het ${a} blokkies en kry nog ${b}. Hoeveel het ${nm} nou?`,`<div class="eq">${objs(a,'🧱')}<b>+</b>${objs(b,'🧱')}</div>`,a+b,1,10,`${a} plus ${b} is ${a+b}.`)}
   const a=rnd(3,9),b=rnd(1,a-1);return numQ('Probleem',`${nm} het ${a} koekies en eet ${b}. Hoeveel bly oor?`,objs(a,'🍪',b,5),a-b,0,10,`${a} min ${b} is ${a-b}.`)};
 const genSomme=()=>shuffle([].concat(uniq(qAdd,4),uniq(qSub,3),uniq(qWord,3)));
@@ -512,21 +549,22 @@ function runLuister(tile){
   function start(){
     const grid=sample(ITEMS,6);const seq=sample(grid,lens[round]);let step=0,miss=0;
     const text='Tik '+seq.map(x=>'die '+x[0]).join(', dan ')+'.';
+    const parts=['Tik'];seq.forEach((x,k)=>{if(k)parts.push('dan');parts.push('die '+x[0])});
     setDots(4,round,Array.from({length:round},()=>true));
     stageCard(`<div style="text-align:center"><span class="qtag">Luister en doen · ${lens[round]} opdragte</span></div><h2 class="qtext">Luister mooi en tik in die regte volgorde.</h2>
       <p class="small" style="text-align:center">Grootmens: lees dit hardop as daar geen stem is. “${text}”</p>
       <div class="actions" style="margin-top:8px"><button class="btn ghost" id="again2">🔊 Luister weer</button></div>
       <div class="cards3" style="grid-template-columns:repeat(3,1fr)">${grid.map((x,k)=>`<button class="pick" data-k="${k}" aria-label="${x[0]}">${x[1]}</button>`).join('')}</div>
       <div class="pips" id="pips">${seq.map(()=>'<span class="pip"></span>').join('')}</div><div class="fb" id="fb" aria-live="polite"></div>`);
-    $('#again2').addEventListener('click',()=>speak(text,true));
-    if(soundOn)speak(text,false);
+    $('#again2').addEventListener('click',()=>speakSeq(parts,text,true));
+    if(soundOn)speakSeq(parts,text,false);
     $$('.pick').forEach(b=>b.addEventListener('click',()=>{
       const it=grid[+b.dataset.k];
       if(it===seq[step]){step++;b.classList.add('got');$$('#pips .pip').forEach((p,j)=>p.classList.toggle('on',j<step));
         if(step===seq.length){if(miss===0){clean++;addStar(1)}const fb=$('#fb');fb.className='fb good';fb.textContent=pick(PRAISE);
           setTimeout(()=>{round++;if(round<lens.length)start();else{setDots(4,-1,[true,true,true,true]);complete(tile,`${clean} van 4 rondtes sonder foute.`)}},900)}}
       else{miss++;step=0;$$('.pick').forEach(x=>x.classList.remove('got'));$$('#pips .pip').forEach(p=>p.classList.remove('on'));b.classList.remove('no');void b.offsetWidth;b.classList.add('no');
-        const fb=$('#fb');fb.className='fb try';fb.textContent='Luister weer en begin van voor af.';if(soundOn)speak(text,false)}
+        const fb=$('#fb');fb.className='fb try';fb.textContent='Luister weer en begin van voor af.';if(soundOn)speakSeq(parts,text,false)}
     }));
   }
   start();
