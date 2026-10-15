@@ -14,7 +14,7 @@ elke assesseringsitem oefen (25 aktiwiteite + gemengde uitdaging).
 Laai die app af op ’n tablet of foon – al 756 Afrikaanse stemme is ingebou,
 so geen internet is nodig om te speel nie.
 
-**[⬇️ Laai graadrk4-v1.5.apk af (25 MB)](https://github.com/Nageljakes/graadrk4/releases/download/v1.5/graadrk4-v1.5.apk)**
+**[⬇️ Laai graadrk4-v1.6.apk af (25 MB)](https://github.com/Nageljakes/graadrk4/releases/download/v1.6/graadrk4-v1.6.apk)**
 
 Installeer: maak die afgelaaide lêer oop en tik **Installeer** (laat
 “Installeer van onbekende bronne” toe as die foon daarvoor vra).
